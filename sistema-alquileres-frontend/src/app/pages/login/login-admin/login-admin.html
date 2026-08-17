@@ -1,0 +1,46 @@
+<div class="body-administrador">
+    <div class="login-card text-center">
+        <a routerLink="" class="back-button">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="login-icon">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h2 class="fw-normal mb-1" style="font-size: 2.2rem;">
+            Portal del Administrador
+        </h2>
+        <p class="text-muted mb-5">
+            Ingresa tus credenciales de administrador
+        </p>
+        <form (ngSubmit)="login()">
+            <div class="form-group-custom">
+                <span class="label-custom">correo *</span>
+                <input
+                    type="text"
+                    [(ngModel)]="correo"
+                    name="correo"
+                    class="form-control form-control-custom"
+                    placeholder="Correo administrador"
+                    required
+                    (input)="error=false">
+            </div>
+            <div class="form-group-custom">
+                <span class="label-custom">Contraseña *</span>
+                <input
+                    type="password"
+                    [(ngModel)]="password"
+                    name="password"
+                    class="form-control form-control-custom"
+                    placeholder="Contraseña"
+                    required
+                    (input)="error=false">
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary w-100 btn-acceder">
+
+                ACCEDER
+            </button>
+        </form>
+    </div>
+</div>

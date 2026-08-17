@@ -1,0 +1,202 @@
+<div class="dashboard-container">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo-box">
+        <i class="fa-solid fa-building"></i>
+      </div>
+      <div>
+        <h2>Sistema de Alquileres</h2>
+        <span>Panel de Administración</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="admin-info">
+        <div class="avatar">A</div>
+        <div>
+          <h4>Administrador</h4>
+          <span>Administrador General</span>
+        </div>
+      </div>
+      <a routerLink="" class="btn-salir">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Salir
+      </a>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="dashboard-title">
+      <h1>Dashboard Administrativo</h1>
+      <p>Gestiona solicitudes y propietarios del sistema</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="info-card pendientes">
+        <div class="card-icon">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <div>
+          <h2>
+            {{ solicitudes.filter((s) => s.estusu === 'Pendiente').length }}
+          </h2>
+          <span>Solicitudes Pendientes</span>
+        </div>
+      </div>
+
+      <div class="info-card aprobados">
+        <div class="card-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <h2>
+            {{ solicitudes.filter((s) => s.estusu === 'Aprobado').length }}
+          </h2>
+          <span>Propietarios Aprobados</span>
+        </div>
+      </div>
+
+      <div class="info-card rechazados">
+        <div class="card-icon">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+        <div>
+          <h2>
+            {{ solicitudes.filter((s) => s.estusu === 'Rechazado').length }}
+          </h2>
+          <span>Solicitudes Rechasadas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-header">
+        <h3>Solicitudes de Propietarios</h3>
+        <div class="tabs">
+          <button
+            class="tab-btn"
+            [class.active]="pestanaActual === 'Pendientes'"
+            (click)="cambiarPestana('Pendientes')"
+          >
+            Pendientes
+          </button>
+          <button
+            class="tab-btn"
+            [class.active]="pestanaActual === 'Aprobados'"
+            (click)="cambiarPestana('Aprobados')"
+          >
+            Aprobados
+          </button>
+          <button
+            class="tab-btn"
+            [class.active]="pestanaActual === 'Rechazados'"
+            (click)="cambiarPestana('Rechazados')"
+          >
+            Rechazados
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Documento</th>
+              <th>Correo</th>
+              <th>Nro Contacto</th>
+              <th>Fecha</th>
+              <th *ngIf="pestanaActual === 'Rechazados'">Días Restantes</th>
+              <th>Estado</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="solicitudesFiltradas.length === 0">
+              <td colspan="7" class="empty-state">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>No existen solicitudes registradas</p>
+              </td>
+            </tr>
+
+            <tr *ngFor="let solicitud of solicitudesFiltradas">
+              <td>
+                {{ solicitud.nomusu }}
+                {{ solicitud.apepusu }}
+                {{ solicitud.apemusu }}
+              </td>
+              <td>{{ solicitud.docusu }}</td>
+              <td>{{ solicitud.corusu }}</td>
+              <td>{{ solicitud.celusu }}</td>
+              <td>{{ solicitud.fecusu }}</td>
+              <td *ngIf="pestanaActual === 'Rechazados'">
+                <span class="dias-badge">
+                  {{ solicitud.diasRestantes }} días
+                </span>
+
+                <span *ngIf="solicitud.estusu === 'Aprobado'"> — </span>
+              </td>
+
+              <td>
+                <span class="estado-badge">
+                  {{ solicitud.estusu }}
+                </span>
+              </td>
+              <td>
+                <div class="acciones-box">
+                  <!-- PENDIENTE -->
+                  <ng-container *ngIf="solicitud.estusu === 'Pendiente'">
+                    <button
+                      class="btn-accion btn-aprobar "
+                      (click)="aprobarUsuario(solicitud.codusu)"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                      Aprobar
+                    </button>
+
+                    <button
+                      class="btn-accion btn-rechazar"
+                      (click)="rechazarUsuario(solicitud.codusu)"
+                    >
+                      <i class="fa-solid fa-xmark"></i>
+                      Rechazar
+                    </button>
+                  </ng-container>
+
+                  <!-- APROBADO -->
+                  <ng-container *ngIf="solicitud.estusu === 'Aprobado'">
+                    <button
+                      class="btn-accion btn-rechazar"
+                      (click)="rechazarUsuario(solicitud.codusu)"
+                    >
+                      <i class="fa-solid fa-ban"></i>
+                      Rechazar
+                    </button>
+                  </ng-container>
+
+                  <!-- RECHAZADO -->
+                  <ng-container *ngIf="solicitud.estusu === 'Rechazado'">
+                    <button
+                      class="btn-accion btn-aprobar"
+                      (click)="aprobarUsuario(solicitud.codusu)"
+                    >
+                      <i class="fa-solid fa-rotate-left"></i>
+                      Aprobar
+                    </button>
+
+                    <button
+                      class="btn-accion btn-eliminar"
+                      (click)="eliminarUsuario(solicitud.codusu)"
+                    >
+                      <i class="fa-solid fa-trash"></i>
+                      Eliminar
+                    </button>
+                  </ng-container>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,2273 @@
+<!-- ===================================================== -->
+<!-- 1. CONTENEDOR PRINCIPAL DEL DASHBOARD -->
+<!-- ===================================================== -->
+<div class="body-propietario-dashboard">
+  <!-- ===================================================== -->
+  <!-- 2. NAVBAR SUPERIOR -->
+  <!-- ===================================================== -->
+  <nav class="navbar navbar-custom sticky-top shadow-sm">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1 text-white">
+        <i class="fa-solid fa-city me-2"></i>
+        Panel de Gestión - Propietario
+      </span>
+
+      <div class="d-flex align-items-center">
+        <div class="text-end me-3 text-white">
+          <small class="d-block fw-bold">
+            {{ usuario?.nombre }}
+          </small>
+        </div>
+
+        <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+          style="width: 40px; height: 40px; font-weight: bold">
+          P
+        </div>
+
+        <a routerLink="/" class="text-white text-decoration-none border-start ps-3">
+          <i class="fa-solid fa-power-off"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4">
+    <!-- ===================================================== -->
+    <!-- 3. RESUMEN GENERAL DEL PROPIETARIO -->
+    <!-- ===================================================== -->
+
+    <!-- Cards:
+         - Total Sedes
+         - Total Cuartos
+         - Total Inquilinos
+         - Ingreso Proyectado
+    -->
+    <section class="dashboard-resumen">
+
+      <div class="resumen-card sedes">
+        <i class="fa-solid fa-building"></i>
+        <span>Sedes</span>
+        <h2>{{ sedes.length }}</h2>
+      </div>
+
+      <div class="resumen-card metricas"
+          (click)="abrirMetricas()">
+
+          <i class="fa-solid fa-sack-dollar"></i>
+
+          <span>Métricas</span>
+
+          <h2>
+              S/ {{ metricas?.ganancia | number:'1.2-2' }}
+          </h2>
+
+      </div>
+
+      <div class="resumen-card cuartos">
+        <i class="fa-solid fa-door-open"></i>
+        <span>Cuartos</span>
+        <h2>{{ cuartos.length }}</h2>
+      </div>
+
+      <div class="resumen-card inquilinos">
+        <i class="fa-solid fa-users"></i>
+        <span>Inquilinos</span>
+        <h2>{{ inquilinos.length }}</h2>
+      </div>
+      <!-- <div class="resumen-card reservas">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Reservas</span>
+        <h2>{{ reservas.length }}</h2>
+      </div> -->
+    </section>
+    <!-- <section id="resumen-general">
+      <h2 class="section-title">Resumen General</h2>
+
+      <div class="row g-3">
+        <div class="col-md-3">
+          <div class="stat-card card-purple shadow-sm">
+            <span class="value">5</span>
+
+            <div>Total Propiedades</div>
+
+            <i class="fa-solid fa-house"></i>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="stat-card card-pink shadow-sm">
+            <span class="value">80%</span>
+
+            <div>Tasa de Ocupación</div>
+
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="stat-card card-cyan shadow-sm">
+            <span class="value">4</span>
+
+            <div>Inquilinos Activos</div>
+
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="stat-card card-green shadow-sm">
+            <span class="value">S/ 7,300</span>
+
+            <div>Ingreso Proyectado</div>
+
+            <i class="fa-solid fa-sack-dollar"></i>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    <!-- ===================================================== -->
+    <!-- 4. GESTIÓN DE SEDES-->
+    <!-- ===================================================== -->
+
+    <!--
+      Aquí irán las tarjetas:
+
+      Sede Central
+      Sede Norte
+      Sede Sur
+
+      + Nueva Sede
+    -->
+
+    <!-- ===================================================== -->
+    <!-- 5. DETALLE DE SEDE SELECCIONADA -->
+    <!-- ===================================================== -->
+
+    <!--
+      Solo aparece cuando una sede es seleccionada.
+
+      Información:
+      - Nombre
+      - Dirección
+      - Descripción
+      - Pisos
+      - Cuartos
+      - Inquilinos
+    -->
+    <!-- ===================================================== -->
+    <!-- 6. ACCIONES RÁPIDAS -->
+    <!-- ===================================================== -->
+
+    <!--
+      Registrar Sede
+      Registrar Inquilino
+      Registrar Cuarto
+      Agregar Piso
+    -->
+    <section id="acciones-rapidas">
+      <!-- HEADER INVENTARIO -->
+      <div class="d-flex justify-content-between align-items-end mt-4 mb-3">
+
+        <h2 class="section-title mb-0">
+          Inventario Digital
+        </h2>
+
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary shadow-sm py-2 px-4" (click)="abrirModalHistoricos()">
+
+            <i class="fa-solid fa-clock-rotate-left me-2"></i>
+
+            REPORTES HISTÓRICOS
+
+          </button>
+          <!-- NUEVA SEDE -->
+          <button class="btn btn-sede shadow-sm py-2 px-4" (click)="abrirModalSede()">
+
+            <i class="fa-solid fa-circle-plus me-2"></i>
+
+            NUEVA SEDE
+
+          </button>
+
+          <!-- NUEVO INQUILINO -->
+          <button class="btn btn-inquilino shadow-sm py-2 px-4" (click)="abrirModalInquilino()">
+
+            <i class="fa-solid fa-user-plus me-1"></i>
+
+            CREAR NUEVO INQUILINO
+
+          </button>
+
+          <!-- NUEVO CUARTO -->
+          <button class="btn btn-register shadow-sm py-2 px-4" (click)="abrirModalCuarto()">
+
+            <i class="fa-solid fa-circle-plus me-2"></i>
+
+            REGISTRAR NUEVO CUARTO
+
+          </button>
+          <!--Gestionar Servicios-->
+
+          <button class="btn btn-inquilino shadow-sm py-2 px-4" title="Servicios" (click)="abrirServicio()" >
+
+            <i class="fa-solid fa-lightbulb me-2"></i>
+
+            GESTIONAR SERVICIOS
+          </button>
+          <button
+              class="btn btn-danger shadow-sm py-2 px-4 me-2"
+              (click)="abrirModalContratosFinalizados()">
+              <i class="fa-solid fa-user-clock me-2"></i>
+              CONTRATOS FINALIZADOS
+          </button>
+        </div>
+
+      </div>
+      <div *ngIf="modo === 'listar'">
+        <div class="content-box shadow-sm">
+          <!-- TABS -->
+          <div class="barra-submodos">
+
+            <ul class="nav nav-tabs nav-tabs-custom">
+
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="subModo === 'sedes'" href="javascript:void(0)"
+                  (click)="cambiarSubModo('sedes')">
+                  SEDES
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="subModo === 'pisos'" href="javascript:void(0)"
+                  (click)="cambiarSubModo('pisos')">
+                  PISOS
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="subModo === 'cuartos'" href="javascript:void(0)"
+                  (click)="cambiarSubModo('cuartos')">
+                  CUARTOS
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="subModo === 'inquilinos'" href="javascript:void(0)"
+                  (click)="cambiarSubModo('inquilinos')">
+                  INQUILINOS
+                </a>
+              </li>
+              <!-- <li class="nav-item">
+                <a
+                  class="nav-link"
+                  [class.active]="subModo === 'reservas'"
+                  href="javascript:void(0)"
+                  (click)="cambiarSubModo('reservas')"
+                >
+                  RESERVAS
+                </a>
+              </li> -->
+            </ul>
+
+
+            <div class="vista-switch">
+
+              <button [class.activo]="vistaTarjetas" (click)="vistaTarjetas=true">
+
+                <i class="fa-solid fa-grip"></i>
+                Tarjetas
+
+              </button>
+
+              <button [class.activo]="!vistaTarjetas" (click)="vistaTarjetas=false">
+
+                <i class="fa-solid fa-table"></i>
+                Tabla
+
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 7. PANEL DE ADMINISTRACIÓN DE LA SEDE -->
+          <!-- ===================================================== -->
+
+          <!--
+      Tabs:
+
+      [PISOS]
+      [CUARTOS]
+      [INQUILINOS]
+    -->
+
+          <div class="barra-filtros" *ngIf="sedeSeleccionada || pisoSeleccionado || cuartoSeleccionado">
+
+            <div class="breadcrumb-dashboard">
+
+              <span *ngIf="sedeSeleccionada">
+                🏢 {{ sedeSeleccionada.nombre }}
+              </span>
+
+              <span *ngIf="pisoSeleccionado">
+                > 🏠 Piso {{ pisoSeleccionado.numero }}
+              </span>
+
+              <span *ngIf="cuartoSeleccionado">
+                > 🚪 Cuarto {{ cuartoSeleccionado.numcuar }}
+              </span>
+
+            </div>
+
+            <button *ngIf="pisoSeleccionado || cuartoSeleccionado" class="btn-limpiar-filtro"
+              (click)="limpiarFiltros()">
+
+              <i class="fa-solid fa-xmark"></i>
+              Quitar filtro
+
+            </button>
+
+          </div>
+          <!-- ===================================================== -->
+          <!-- 8. TABLA DE SEDES Y PISOS -->
+          <!-- ===================================================== -->
+          <section id="tarjetaSede" *ngIf="subModo === 'sedes' && vistaTarjetas">
+            <div class="sedes-container">
+
+              <div class="sede-card" *ngFor="let sede of sedes">
+
+                <div class="sede-header">
+
+                  <h3>
+                    {{ sede.nombre }}
+                  </h3>
+
+                  <span class="estado-sede">
+                    Activa
+                  </span>
+
+                </div>
+
+                <p>
+                  <i class="fa-solid fa-location-dot"></i>
+                  {{ sede.direccion }}
+                </p>
+
+                <p>
+                  {{ sede.descripcion }}
+                </p>
+
+                <div class="sede-stats">
+
+                  <div>
+                    <strong>
+                      {{ sede.cantidadPisos }}
+                    </strong>
+                    <span>Pisos</span>
+                  </div>
+
+                  <div>
+                    <strong>
+                      {{ sede.cantidadCuartos }}
+                    </strong>
+                    <span>Cuartos</span>
+                  </div>
+
+                  <div>
+                    <strong>
+                      {{ sede.cantidadInquilinos }}
+                    </strong>
+                    <span>Inquilinos</span>
+                  </div>
+
+                </div>
+
+                <button class="btn-administrar" (click)="seleccionarSede(sede)">
+
+                  Administrar sede
+
+                </button>
+
+              </div>
+
+            </div>
+          </section>
+          <section id="tablaSede" *ngIf="subModo==='sedes' && !vistaTarjetas">
+
+            <div class="table-responsive">
+
+              <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                  <tr>
+
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Pisos</th>
+                    <th>Cuartos</th>
+                    <th>Inquilinos</th>
+                    <th>Acciones</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  <tr *ngFor="let sede of sedes">
+
+                    <td class="fw-bold">
+                      {{ sede.nombre }}
+                    </td>
+
+                    <td>
+                      {{ sede.direccion }}
+                    </td>
+
+                    <td>
+                      {{ sede.cantidadPisos }}
+                    </td>
+
+                    <td>
+                      {{ sede.cantidadCuartos }}
+                    </td>
+
+                    <td>
+                      {{ sede.cantidadInquilinos }}
+                    </td>
+
+                    <td>
+
+                      <button class="btn btn-sm btn-outline-primary" (click)="seleccionarSede(sede)">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Administrar
+
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+          <section id="tarjetaPiso" *ngIf="subModo === 'pisos' && vistaTarjetas">
+
+            <div class="pisos-grid">
+
+              <div class="piso-card" *ngFor="let piso of pisos" (click)="seleccionarPiso(piso)">
+
+                <div class="piso-header">
+
+                  <h4>
+                    🏠 Piso {{ piso.numero }}
+                  </h4>
+
+                  <span class="estado-piso">
+
+                    {{ piso.estado ? 'Activo' : 'Inactivo' }}
+
+                  </span>
+
+                </div>
+
+
+                <div class="piso-sede">
+
+                  <p>
+
+                    🏢 {{ piso.nombreSede }}
+
+                  </p>
+
+                  <p>
+
+                    📍 {{ piso.direccionSede }}
+
+                  </p>
+
+                </div>
+
+
+                <div class="piso-info">
+
+                  <div>
+
+                    <strong>
+
+                      {{ piso.cantidadCuartos }}
+
+                    </strong>
+
+                    <span>Cuartos</span>
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+
+                      {{ piso.cantidadInquilinos }}
+
+                    </strong>
+
+                    <span>Inquilinos</span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+          <section id="tablaPiso" *ngIf="subModo==='pisos' && !vistaTarjetas">
+
+            <div class="table-responsive">
+
+              <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                  <tr>
+
+                    <th>Piso</th>
+                    <th>Sede</th>
+                    <th>Dirección</th>
+                    <th>Cuartos</th>
+                    <th>Inquilinos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  <tr *ngFor="let piso of pisos">
+
+                    <td class="fw-bold">
+
+                      Piso {{ piso.numero }}
+
+                    </td>
+
+                    <td>
+
+                      {{ piso.nombreSede }}
+
+                    </td>
+
+                    <td>
+
+                      {{ piso.direccionSede }}
+
+                    </td>
+
+                    <td>
+
+                      {{ piso.cantidadCuartos }}
+
+                    </td>
+
+                    <td>
+
+                      {{ piso.cantidadInquilinos }}
+
+                    </td>
+
+                    <td>
+
+                      {{ piso.estado ? 'Activo' : 'Inactivo' }}
+
+                    </td>
+
+                    <td>
+
+                      <button class="btn btn-sm btn-outline-primary" (click)="seleccionarPiso(piso)">
+
+                        <i class="fa-solid fa-door-open"></i>
+
+                        Ver cuartos
+
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+          <!-- ===================================================== -->
+          <!-- 9. TABLA DE CUARTOS -->
+          <!-- ===================================================== -->
+          <section id="tarjetas-cuartos" *ngIf="subModo === 'cuartos' && vistaTarjetas">
+
+            <div class="cuartos-grid">
+
+              <div class="cuarto-card" *ngFor="let c of cuartos">
+
+                <div class="cuarto-header">
+
+                  <h3>
+                    🚪 Cuarto {{ c.numcuar }}
+                  </h3>
+
+                </div>
+
+                <div class="cuarto-body">
+                  <p>
+                    👤 {{ c.nombreCompleto }}
+                  </p>
+                  <p>
+                    🏢 {{ c.nombreSede }}
+                  </p>
+                  <p>
+                    🏠 Piso {{ c.numeroPiso }}
+                  </p>
+                  <p>
+                    📍 {{ c.dircuar }}
+                  </p>
+                  <h4>
+
+                    S/. {{ c.preccuar }}
+
+                  </h4>
+
+                </div>
+                <div class="footer-cuarto">
+                  <div class="estado-cuarto">
+
+                    <span [ngClass]="{
+          'estado-disponible': c.estcuar==='Disponible',
+          'estado-ocupado': c.estcuar==='Ocupado',
+          'estado-inhabilitado': c.estcuar==='Inhabilitado'
+        }">
+
+                      {{ c.estcuar }}
+
+                    </span>
+
+                  </div>
+
+                  <div class="acciones-cuarto">
+
+                    <button class="btn-cuarto editar" (click)="abrirModalEditarCuarto(c.codcuar)" title="Editar">
+
+                      <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+                    <button class="btn-cuarto usuarios" (click)="seleccionarCuarto(c)" title="Ver inquilinos">
+
+                      <i class="fa-solid fa-users"></i>
+
+                    </button>
+
+                    <button *ngIf="c.estcuar==='Inhabilitado'" class="btn-cuarto habilitar" (click)="habilitar(c)"
+                      title="Habilitar">
+
+                      <i class="fa-solid fa-check"></i>
+
+                    </button>
+
+                    <button *ngIf="c.estcuar!=='Inhabilitado'" class="btn-cuarto eliminar" (click)="eliminar(c)"
+                      title="Inhabilitar">
+
+                      <i class="fa-solid fa-ban"></i>
+
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+          <section *ngIf="subModo === 'cuartos' && !vistaTarjetas">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Número</th>
+                    <th>Inquilino</th>
+                    <th>Sede</th>
+                    <th>Piso</th>
+                    <th>Dirección</th>
+                    <th>Renta Mensual</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let c of cuartos">
+                    <td class="fw-bold">Cuarto {{ c.numcuar }}</td>
+
+                    <td>
+                      {{ c.nombreCompleto }}
+                    </td>
+                    <td>
+                      {{ c.nombreSede }}
+                    </td>
+                    <td>
+                      {{ c.numeroPiso }}
+                    </td>
+
+                    <td>
+                      {{ c.dircuar }}
+                    </td>
+
+                    <td class="fw-bold text-primary">S/.{{ c.preccuar }}</td>
+
+                    <td class="fw-bold">
+                      {{ c.estcuar }}
+                    </td>
+
+                    <td class="text-center">
+                      <button class="btn btn-sm btn-outline-secondary me-1" (click)="abrirModalEditarCuarto(c.codcuar)">
+                        <i class="fa-solid fa-pen"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-primary me-1" (click)="seleccionarCuarto(c)"
+                        title="Ver inquilinos">
+
+                        <i class="fa-solid fa-users"></i>
+
+                      </button>
+                      <button *ngIf="c.estcuar === 'Inhabilitado'" class="btn btn-sm btn-outline-success me-1"
+                        (click)="habilitar(c)" title="Habilitar">
+                        <i class="fa-solid fa-check"></i>
+                      </button>
+
+                      <button *ngIf="c.estcuar !== 'Inhabilitado'" class="btn btn-sm btn-outline-danger me-1"
+                        (click)="eliminar(c)" title="Inhabilitar">
+                        <i class="fa-solid fa-ban"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <!-- ===================================================== -->
+          <!-- 10. TABLA DE INQUILINOS -->
+          <!-- ===================================================== -->
+                    <!-- ===================================================== -->
+          <!-- 10. TABLA DE INQUILINOS (VISTA TARJETAS) -->
+          <!-- ===================================================== -->
+          <section id="tarjetas-inquilinos" *ngIf="subModo === 'inquilinos' && vistaTarjetas">
+            <div class="inquilinos-grid">
+              <div class="inquilino-card" *ngFor="let i of inquilinos">
+                <div class="inquilino-header">
+                  <div class="foto-perfil">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <div>
+                    <h5>{{ i.nombreCompleto }}</h5>
+                    <span class="estado-inquilino">{{ i.estado }}</span>
+                  </div>
+                </div>
+
+                <div class="inquilino-info">
+                  <p>🏢 {{ i.nombreSede }}</p>
+                  <p>🏠 Piso {{ i.numeroPiso }} · 🚪 Cuarto {{ i.numCuarto }}</p>
+                  <p><i class="fa-regular fa-id-card"></i> {{ i.dni }}</p>
+                  <p>
+                    <i class="fa-solid fa-phone"></i> {{ i.celular }} — 
+                    <i class="fa-solid fa-envelope"></i> {{ i.correo }}
+                  </p>
+                </div>
+
+                <div class="footer-inquilino">
+                  <span class="dias-restantes" [ngClass]="{
+                    'verde': i.diasRestantes > 7,
+                    'amarillo': i.diasRestantes <= 7 && i.diasRestantes > 3,
+                    'rojo': i.diasRestantes <= 3
+                  }">
+                    <i class="fa-regular fa-clock"></i> {{ i.diasRestantes }} días restantes
+                  </span>
+
+                  <div class="acciones-inquilino">
+                    <button class="btn-editar" (click)="irEditarInquilino(i)" title="Editar">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+
+                    <button class="btn-documentos" (click)="abrirDocumento(i)" title="Documentos">
+                      <i class="fa-solid fa-folder-open"></i>
+                    </button>
+
+                    <!-- ✅ NUEVO BOTÓN: EXTENDER 1 MES -->
+                    <button class="btn btn-sm btn-outline-warning me-1" (click)="extenderMes(i)" title="Extender fecha de pago 1 mes">
+                      <i class="fa-solid fa-calendar-plus"></i>
+                    </button>
+
+                    <button class="btn-eliminar" (click)="finalizarContrato(i)" title="Finalizar Contrato">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+                    <!-- ===================================================== -->
+          <!-- 10. TABLA DE INQUILINOS (VISTA TABLA) -->
+          <!-- ===================================================== -->
+          <section id="tabla-inquilinos" *ngIf="subModo === 'inquilinos' && !vistaTarjetas">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nombre Completo</th>
+                    <th>DNI</th>
+                    <th>Num. Contacto</th>
+                    <th>Sede</th>
+                    <th>Piso</th>
+                    <th>Cuarto</th>
+                    <th>Días Restantes</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngIf="inquilinos.length === 0">
+                    <td colspan="9" class="text-center text-muted py-4">
+                      No hay inquilinos registrados.
+                    </td>
+                  </tr>
+                  <tr *ngFor="let i of inquilinos">
+                    <td class="fw-bold">{{ i.nombreCompleto }}</td>
+                    <td>{{ i.dni }}</td>
+                    <td>{{ i.celular }}</td>
+                    <td><span class="badge bg-secondary">{{ i.nombreSede }}</span></td>
+                    <td><span class="badge bg-secondary">{{ i.numeroPiso }}</span></td>
+                    <td><span class="badge bg-secondary">{{ i.numCuarto }}</span></td>
+                    <td>
+                      <span class="badge" [ngClass]="
+                        i.diasRestantes <= 3 ? 'bg-danger' :
+                        i.diasRestantes <= 7 ? 'bg-warning text-dark' : 'bg-success'
+                      ">
+                        {{ i.diasRestantes }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="i.estado === 'Activo' ? 'bg-success' : 'bg-danger'">
+                        {{ i.estado }}
+                      </span>
+                    </td>
+
+                    <td class="text-center">
+                      <button (click)="irEditarInquilino(i)" class="btn btn-sm btn-outline-secondary me-1" title="Editar">
+                        <i class="fa-solid fa-user-gear"></i>
+                      </button>
+
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Documento" (click)="abrirDocumento(i)">
+                        <i class="fa-solid fa-file-lines"></i>
+                      </button>
+
+                      <!-- ✅ NUEVO BOTÓN: EXTENDER 1 MES -->
+                      <!-- <button (click)="extenderMes(i)" class="btn btn-sm btn-outline-warning me-1" title="Extender fecha de pago 1 mes">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                      </button> -->
+
+                      <button (click)="finalizarContrato(i)" class="btn btn-sm btn-outline-danger" title="Finalizar Contrato">
+                        <i class="fa-solid fa-user-minus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+      <!-- ===================================================== -->
+      <!-- 10.1 TABLA DE RESERVAS -->
+      <!-- ===================================================== -->
+       <div *ngIf="subModo === 'reservas'">
+            <section id="tarjetasReservas" *ngIf="subModo === 'reservas' && vistaTarjetas">
+              <div class="reservas-grid">
+                <div class="reserva-card" *ngFor="let r of reservas">
+                  <div class="reserva-header">
+                    <h3><i class="fa-regular fa-calendar-check"></i> Reserva #{{ r.idReserva }}</h3>
+                    <span class="precio-total">S/. {{ r.montoTotal }}</span>
+                  </div>
+
+                  <div class="reserva-body">
+                    <p>👤 <strong>Inquilino:</strong> {{ r.nombreCompleto }}</p>
+                    <p>🏢 <strong>Sede:</strong> {{ r.nombreSede }}</p>
+                    <p>
+                      🏠 <strong>Ubicación:</strong> Piso {{ r.numeroPiso }} · 🚪 Cuarto {{ r.numCuarto }}
+                    </p>
+                    <hr class="my-2 text-muted" />
+                    <p>
+                      <i class="fa-solid fa-calendar-days text-secondary"></i>
+                      <strong>Fecha Entrada:</strong>
+                      <span *ngIf="r.fechaEntrada">{{ r.fechaEntrada | date: 'dd/MM/yyyy' }}</span>
+                      <span *ngIf="!r.fechaEntrada" class="text-muted small">
+                        <i class="fa-regular fa-clock"></i> {{ r.diasRestantes }} días rest.
+                      </span>
+                    </p>
+                  </div>
+
+                  <div class="footer-reserva">
+                    <div class="estado-reserva">
+                      <span
+                        [ngClass]="{
+                          'estado-confirmada': r.estado === 'Confirmada' || r.estado === 'Activo',
+                          'estado-pendiente': r.estado === 'Pendiente' || r.estado === 'Reservado',
+                          'estado-cancelada': r.estado === 'Cancelada',
+                        }"
+                      >
+                        {{ r.estado }}
+                      </span>
+                    </div>
+
+                    <div class="acciones-reserva">
+                      <!-- NUEVO: Botón de Documentos en Tarjetas (Crea un objeto compatible al vuelo) -->
+                      <button
+                        class="btn-resarto documentos"
+                        style="background-color: #17a2b8; color: white;"
+                        (click)="abrirDocumento(r)"
+                        title="Documentos"
+                      >
+                        <i class="fa-solid fa-folder-open"></i>
+                      </button>
+                      <button
+                        class="btn-resarto editar"
+                        (click)="abrirModalEditarReserva(r)"
+                        title="Editar Reserva"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button
+                        class="btn-resarto pagos"
+                        (click)="verDetallesPago(r)"
+                        title="Ver Pagos"
+                      >
+                        <i class="fa-solid fa-receipt"></i>
+                      </button>
+                      <button
+                        *ngIf="r.estado !== 'Cancelada'"
+                        class="btn-resarto cancelar"
+                        (click)="cancelarReserva(r)"
+                        title="Cancelar Reserva"
+                      >
+                        <i class="fa-solid fa-rectangle-xmark"></i>
+                      </button>
+                      <button
+                        *ngIf="r.estado === 'Pendiente' || r.estado === 'Reservado'"
+                        class="btn-resarto confirmar"
+                        (click)="confirmarReserva(r)"
+                        title="Confirmar Reserva"
+                      >
+                        <i class="fa-solid fa-circle-check"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="tablaReservas" *ngIf="!vistaTarjetas">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Inquilino</th>
+                      <th>Sede / Habitación</th>
+                      <th>Fecha Entrada</th>
+                      <th>Estado</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngIf="reservas.length === 0">
+                      <td colspan="6" class="text-center text-muted py-4">
+                        No hay reservas registradas en este periodo.
+                      </td>
+                    </tr>
+                    <tr *ngFor="let r of reservas">
+                      <td class="fw-bold">#{{ r.idReserva }}</td>
+                      <td>
+                        <div class="fw-bold">{{ r.nombreCompleto }}</div>
+                        <small class="text-muted">DNI: {{ r.dni }}</small>
+                      </td>
+                      <td>
+                        <div>{{ r.nombreSede }}</div>
+                        <small class="text-muted">Piso {{ r.numeroPiso }} - Cuarto {{ r.numCuarto }}</small>
+                      </td>
+                      <td>
+                        <span *ngIf="r.fechaEntrada">{{ r.fechaEntrada | date: 'dd/MM/yyyy' }}</span>
+                        <span *ngIf="!r.fechaEntrada" class="text-muted small">
+                          <i class="fa-regular fa-clock"></i> {{ r.diasRestantes }} días rest.
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'bg-info text-dark': r.estado === 'Reservado',
+                            'bg-success': r.estado === 'Confirmada' || r.estado === 'Activo',
+                            'bg-warning text-dark': r.estado === 'Pendiente',
+                            'bg-danger': r.estado === 'Cancelada',
+                          }"
+                        >
+                          <i class="fa-solid fa-circle-info me-1" *ngIf="r.estado === 'Reservado'"></i>
+                          {{ r.estado || 'No definido' }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <!-- NUEVO: Botón de Documentos Independiente en Tabla -->
+                        <button
+                          type="button"
+                          (click)="abrirDocumento(r)"
+                          class="btn btn-sm btn-outline-info me-1"
+                          title="Documentos"
+                        >
+                          <i class="fa-solid fa-folder-open"></i>
+                        </button>
+                        <!-- <button
+                          type="button"
+                          (click)="abrirModalEditarReserva(r)"
+                          class="btn btn-sm btn-outline-secondary me-1"
+                          title="Editar"
+                        >
+                          <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="verDetallesPago(r)"
+                          class="btn btn-sm btn-outline-primary me-1"
+                          title="Ver Comprobante"
+                        >
+                          <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </button>
+                        <button
+                          type="button"
+                          *ngIf="r.estado === 'Pendiente' || r.estado === 'Reservado'"
+                          (click)="confirmarReserva(r)"
+                          class="btn btn-sm btn-outline-success me-1"
+                          title="Aprobar/Confirmar"
+                        >
+                          <i class="fa-solid fa-check"></i>
+                        </button> -->
+                        <button
+                          type="button"
+                          *ngIf="r.estado !== 'Cancelada'"
+                          (click)="cancelarReserva(r)"
+                          class="btn btn-sm btn-outline-danger"
+                          title="Cancelar Reserva"
+                        >
+                          <i class="fa-solid fa-ban"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+      <!-- ===================================================== -->
+      <!-- 11. FORMULARIO EDITAR CUARTO -->
+      <!-- ===================================================== -->
+
+      <div class="modal-overlay" *ngIf="mostrarModalEditarCuarto">
+
+        <div class="custom-modal">
+
+          <!-- HEADER -->
+
+          <div class="modal-header-custom">
+
+            <div>
+
+              <h3 class="modal-title-custom">
+
+                <i class="fa-solid fa-pen-to-square me-2"></i>
+
+                Editar Cuarto
+
+              </h3>
+
+              <p class="modal-subtitle">
+
+                Actualiza la información del cuarto
+
+              </p>
+
+            </div>
+
+            <button class="btn-close-custom" type="button" (click)="cerrarModalEditarCuarto()">
+
+              <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+          </div>
+
+          <div class="modal-body-custom">
+
+            <div class="row g-3">
+
+              <!-- SEDE -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Sede
+
+                </label>
+
+                <input class="form-control" [value]="editarCuarto.nombreSede" readonly>
+
+              </div>
+
+              <!-- PISO -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Piso
+
+                </label>
+
+                <input class="form-control" [value]="'Piso ' + editarCuarto.numeroPiso" readonly>
+
+              </div>
+
+              <!-- NUMERO -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Número de cuarto
+
+                </label>
+
+                <input class="form-control" [value]="editarCuarto.numcuar" readonly>
+
+              </div>
+
+              <!-- DIRECCION -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Dirección
+
+                </label>
+
+                <input class="form-control" [value]="editarCuarto.dircuar" readonly>
+
+              </div>
+
+              <!-- PRECIO -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Precio mensual
+
+                </label>
+
+                <input type="number" class="form-control" [(ngModel)]="editarCuarto.preccuar">
+
+              <!-- ESTADO -->
+
+              <div class="row">
+
+                <div class="col-md-6">
+                  <label>Estado actual</label>
+                  <input class="form-control" [value]="editarCuarto.estcuar" readonly>
+                </div>
+
+                <!-- <div class="col-md-6">
+                  <label>Habilitación</label>
+
+                  <button *ngIf="editarCuarto.estcuar !== 'Inhabilitado'" class="btn btn-danger"
+                    (click)="eliminar(editarCuarto)">
+
+                    Inhabilitar
+
+                  </button>
+
+                  <button *ngIf="editarCuarto.estcuar === 'Inhabilitado'" class="btn btn-success"
+                    (click)="habilitar(editarCuarto)">
+
+                    Habilitar
+
+                  </button>
+                </div> -->
+
+              </div>
+              </div>
+
+              <!-- CODIGO -->
+
+              <div class="col-md-6">
+
+                <label class="form-label">
+
+                  Código del cuarto
+
+                </label>
+
+                <div class="form-control d-flex
+                    justify-content-between
+                    align-items-center">
+
+                  <span class="fw-bold">
+
+                    {{ editarCuarto.passcuar }}
+
+                  </span>
+
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="regenerarCodigoEditar()">
+
+                    <i class="fa-solid fa-rotate"></i>
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              <!-- DESCRIPCION -->
+
+              <div class="col-12">
+
+                <label class="form-label">
+
+                  Descripción
+
+                </label>
+
+                <textarea rows="3" class="form-control" [(ngModel)]="editarCuarto.descuar">
+
+                </textarea>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- FOOTER -->
+
+          <div class="modal-footer-custom
+        d-flex
+        justify-content-end
+        gap-2">
+
+            <button class="btn btn-cancelar" (click)="cerrarModalEditarCuarto()">
+
+              Cancelar
+
+            </button>
+
+            <button class="btn btn-guardar" (click)="actualizarCuarto()">
+
+              <i class="fa-solid fa-floppy-disk me-2"></i>
+
+              Guardar cambios
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+      <!-- ===================================================== -->
+      <!-- 12. MODAL REGISTRAR SEDE (NUEVO) -->
+      <!-- ===================================================== -->
+      <div class="modal-overlay" *ngIf="mostrarModalSede">
+        <div class="custom-modal">
+          <div class="modal-header-custom">
+            <div>
+              <h3 class="modal-title-custom">
+                <i class="fa-solid fa-building-circle-arrow-right me-2"></i>
+                Registrar Nueva Sede
+              </h3>
+              <p class="modal-subtitle">Configure los límites del edificio e inmuebles</p>
+            </div>
+            <button class="btn-close-custom" type="button" (click)="cerrarModalSede()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <form #sedeFormulario="ngForm" (ngSubmit)="guardarSede(sedeFormulario)">
+            <div class="modal-body-custom">
+              <div id="BackroomSedeCrear" class="row g-3">
+
+                <div class="col-12">
+                  <label class="form-label">Nombre de la sede</label>
+                  <input class="form-control custom-input" [(ngModel)]="sedeForm.nombre" name="nombre"
+                    #nombreInput="ngModel" required placeholder="Ej: Sede Norte" />
+
+                  <div *ngIf="
+                nombreInput.invalid &&
+                (nombreInput.dirty || nombreInput.touched || sedeFormulario.submitted)
+              " class="text-danger small mt-1">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> Por favor, ingresa un nombre
+                    válido para la sede.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Dirección</label>
+                  <input class="form-control custom-input" [(ngModel)]="sedeForm.direccion" name="direccion"
+                    #direccionInput="ngModel" required placeholder="Ej: Av. Brasil 1234" />
+
+                  <div *ngIf="
+                direccionInput.invalid &&
+                (direccionInput.dirty || direccionInput.touched || sedeFormulario.submitted)
+              " class="text-danger small mt-1">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> Por favor, ingresa una
+                    dirección válida.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="form-label">Descripción</label>
+                    <span class="text-muted small">(Opcional)</span>
+                  </div>
+                  <textarea rows="3" class="form-control custom-input" [(ngModel)]="sedeForm.descripcion"
+                    name="descripcion">
+            </textarea>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Cantidad de pisos</label>
+                  <input type="text" inputmode="numeric" class="form-control custom-input"
+                    [(ngModel)]="sedeForm.cantidadPisos" name="cantidadPisos" #pisosInput="ngModel" required
+                    placeholder="1-30" (input)="validarMaxPisos($event)" (change)="actualizarCuartosPorPiso()"
+                    (ngModelChange)="actualizarCuartosPorPiso()" />
+
+                  <div *ngIf="
+                (pisosInput.invalid ||
+                  sedeForm.cantidadPisos < 1 ||
+                  sedeForm.cantidadPisos > 30) &&
+                (pisosInput.dirty || pisosInput.touched || sedeFormulario.submitted)
+              " class="text-danger small mt-1">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> Debe estar entre 1 y 30 pisos.
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="config-cuarto-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="mb-0">
+                        <i class="fa-solid fa-building"></i>
+                        Configuración de cuartos
+                      </h6>
+
+                      <div class="d-flex align-items-center gap-2">
+                        <label class="mb-0 small"> Global </label>
+                        <input type="text" inputmode="numeric" style="width: 90px" class="form-control form-control-sm"
+                          [(ngModel)]="sedeForm.cuartosGlobal" name="cuartosGlobal" placeholder="1-10"
+                          (input)="validarMaxCuartosGlobal($event)" (ngModelChange)="aplicarCuartosGlobal()" />
+                      </div>
+                    </div>
+
+                    <div *ngFor="
+                  let cantidad of sedeForm.cuartosPorPiso;
+                  let i = index;
+                  trackBy: trackByIndex
+                " class="row align-items-center mb-2">
+                      <div class="col-6">Piso {{ i + 1 }}</div>
+                      <div class="col-6">
+                        <input type="text" inputmode="numeric" class="form-control custom-input"
+                          [(ngModel)]="sedeForm.cuartosPorPiso[i]" [name]="'cuartos' + i" placeholder="1-10"
+                          (input)="validarMaxCuartosPiso($event, i)" (ngModelChange)="pisoTocado[i] = true" />
+
+                        <div *ngIf="
+                      pisoTocado[i] &&
+                      (sedeForm.cuartosPorPiso[i] == null ||
+                        sedeForm.cuartosPorPiso[i] < 1 ||
+                        sedeForm.cuartosPorPiso[i] > 10)
+                    " class="text-danger small mt-1">
+                          Permitido de 1 a 10 cuartos.
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="modal-footer-custom d-flex justify-content-end gap-2 mt-3">
+              <button class="btn btn-cancelar" type="button" (click)="cerrarModalSede()">
+                Cancelar
+              </button>
+
+              <button class="btn btn-guardar-sede" type="submit" [disabled]="sedeFormulario.invalid">
+                <i class="fa-solid fa-building-circle-check me-2"></i>
+                Guardar Sede
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- 13. MODAL AGREGAR PISO (NUEVO) -->
+      <!-- ===================================================== -->
+
+      <div>
+
+      </div>
+      <!-- ===================================================== -->
+      <!-- 14. MODAL REGISTRAR CUARTO (ACTUALIZADO) -->
+      <!-- ===================================================== -->
+      <div class="modal-overlay" *ngIf="mostrarModalCuarto">
+        <div class="custom-modal">
+
+          <!-- HEADER -->
+          <div class="modal-header-custom">
+            <div>
+              <h3 class="modal-title-custom">
+                <i class="fa-solid fa-house-circle-check me-2"></i>
+                Registrar Nuevo Cuarto
+              </h3>
+              <p class="modal-subtitle">Completa la información del inmueble</p>
+            </div>
+
+            <button class="btn-close-custom" type="button" (click)="cerrarModalCuarto()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- ALERTA -->
+          <div *ngIf="mostrarAlertaExitoCuarto"
+            class="alert alert-success d-flex align-items-center m-3 p-3 custom-alert-success" role="alert"
+            style="border-left: 5px solid #198754; background-color: #d1e7dd; color: #0f5132; border-radius: 8px;">
+
+            <i class="fa-solid fa-circle-check fs-4 me-3 text-success"></i>
+
+            <div>
+              <strong class="d-block text-success">¡Operación Exitosa!</strong>
+              <span>El nuevo cuarto ha sido registrado correctamente.</span>
+            </div>
+          </div>
+
+          <!-- FORM -->
+          <form #cuartoForm="ngForm" (ngSubmit)="crear()">
+
+            <div class="modal-body-custom">
+              <div class="row g-3">
+
+                <!-- SELECCION DE SEDE -->
+                <div class="col-md-6">
+
+                  <label class="form-label">
+                    Sede
+                  </label>
+
+                  <select class="form-select" [(ngModel)]="codsedeSeleccionada" name="codsede" (change)="cargarPisos()">
+
+                    <option [ngValue]="null">
+                      Seleccione una sede
+                    </option>
+
+                    <option *ngFor="let sede of sedes" [ngValue]="sede.codsede">
+
+                      {{ sede.nombre }}
+
+                    </option>
+
+                  </select>
+
+                </div>
+                <!-- SELECCION DE PISO -->
+                <div class="col-md-6">
+
+                  <label class="form-label">
+                    Piso
+                  </label>
+
+                  <select class="form-select" [(ngModel)]="codpisoSeleccionado" name="codpiso"
+                    (change)="seleccionarPisoNuevoCuarto()">
+
+                    <option [ngValue]="null">
+                      Seleccione un piso
+                    </option>
+
+                    <option *ngFor="let piso of pisosDisponibles" [ngValue]="piso.codpiso">
+
+                      Piso {{ piso.numero }}
+
+                    </option>
+
+                  </select>
+
+                </div>
+                <div class="col-md-6">
+
+                  <label class="form-label">
+                    Número de Cuarto
+                  </label>
+
+                  <input class="form-control" [value]="nuevoNumeroCuarto || 'Seleccione un piso'" readonly>
+
+                </div>
+                <!-- PRECIO -->
+                <div class="col-md-6">
+                  <label class="form-label">Precio Mensual</label>
+
+                  <input type="number" name="preccuar" class="form-control custom-input" [(ngModel)]="cuarto.preccuar"
+                    #preccuarRef="ngModel" min="1" required placeholder="Ej: 1500">
+
+                  <div class="invalid-feedback d-block text-danger mt-1"
+                    *ngIf="preccuarRef.invalid && (preccuarRef.dirty || preccuarRef.touched)">
+                    Precio inválido
+                  </div>
+                </div>
+
+                <!-- DIRECCIÓN -->
+                <div class="col-12">
+                  <label class="form-label">Dirección</label>
+
+                  <input type="text" class="form-control" [(ngModel)]="cuarto.dircuar" name="direccionVisual" readonly>
+                </div>
+
+                <!-- DESCRIPCIÓN -->
+                <div class="col-12">
+                  <label class="form-label">Descripción (opcional)</label>
+
+                  <textarea rows="3" name="descuar" class="form-control custom-input" [(ngModel)]="cuarto.descuar"
+                    placeholder="Características del cuarto...">
+            </textarea>
+                </div>
+
+                <!-- ===================================================== -->
+                <!-- CÓDIGO AUTO GENERADO (PASS) -->
+                <!-- ===================================================== -->
+                <div class="col-md-6">
+
+                  <label class="form-label">
+                    Código del Cuarto
+                  </label>
+
+                  <div class="form-control d-flex
+    justify-content-between
+    align-items-center">
+
+                    <span class="fw-bold">
+                      {{ cuarto.passcuar }}
+                    </span>
+
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                      (click)="cuarto.passcuar = generarPass()">
+
+                      <i class="fa-solid fa-rotate"></i>
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+                <!-- ESTADO (FIJO) -->
+                <div class="col-md-6">
+                  <label class="form-label">Estado</label>
+
+                  <input type="text" class="form-control custom-input" value="Disponible" readonly>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer-custom d-flex justify-content-end gap-2">
+
+              <button class="btn btn-cancelar" type="button" (click)="cerrarModalCuarto()">
+                Cancelar
+              </button>
+
+              <button class="btn btn-guardar" type="submit" [disabled]="cuartoForm.invalid">
+
+                <i class="fa-solid fa-floppy-disk me-2"></i>
+                Guardar Cuarto
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+      <!-- ===================================================== -->
+      <!-- 15. MODAL REGISTRAR INQUILINO -->
+      <!-- ===================================================== -->
+      <div class="modal-overlay" *ngIf="mostrarModalInquilino">
+        <div class="custom-modal">
+          <div class="modal-header-custom bg-success-custom">
+            <div>
+              <h3 class="modal-title-custom">
+                <i class="fa-solid fa-user-plus me-2"></i>
+                Registrar Inquilino
+              </h3>
+              <p class="modal-subtitle">Registro validado mediante RENIEC</p>
+            </div>
+
+            <button class="btn-close-custom" (click)="cerrarModalInquilino()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="modal-body-custom">
+            <!-- 🎉 ALERTA DE CRITERIO DE ACEPTACIÓN / ÉXITO -->
+            <div *ngIf="mostrarAlertaExitoInquilino"
+              class="alert alert-success d-flex align-items-center mb-4 p-3 custom-alert-success" role="alert" style="
+          border-left: 5px solid #198754;
+          background-color: #d1e7dd;
+          color: #0f5132;
+          border-radius: 8px;
+        ">
+              <i class="fa-solid fa-circle-check fs-4 me-3 text-success"></i>
+              <div>
+                <strong class="d-block text-success" style="font-size: 1.05rem">¡Operación Exitosa!</strong>
+                <span style="font-size: 0.95rem">El inquilino ha sido registrado correctamente en el sistema y el cuarto
+                  seleccionado ha
+                  sido asignado.</span>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <!-- 📄 Sección Unificada: Tipo, Número Documento y Botón Consultar RENIEC -->
+              <div class="col-12">
+                <div class="row g-3 align-items-end">
+                  <!-- Tipo Documento -->
+                  <div class="col-md-4">
+                    <label class="form-label"> Tipo Documento </label>
+                    <select class="form-select custom-input">
+                      <option>DNI</option>
+                      <option>Pasaporte</option>
+                      <option>Carnet Extranjería</option>
+                    </select>
+                  </div>
+
+                  <!-- Número Documento -->
+                  <div class="col-md-4">
+                    <label class="form-label"> Número Documento </label>
+                    <input type="text" name="dniBusqueda" class="form-control custom-input" maxlength="8"
+                      placeholder="Ingrese DNI" [(ngModel)]="dniBusqueda" #dniRef="ngModel"
+                      [ngClass]="{ 'is-invalid': dniRef.invalid && (dniRef.dirty || dniRef.touched) }" required
+                      pattern="^\d{8}$" />
+                    <div class="invalid-feedback fw-semibold text-danger mt-1">
+                      <i class="fa-solid fa-circle-exclamation me-1"></i> DNI inválido (8 dígitos).
+                    </div>
+                  </div>
+
+                  <!-- Botón Consultar RENIEC -->
+                  <div class="col-md-4">
+                    <button class="btn btn-reniec w-100" (click)="buscarDni()" type="button">
+                      <i class="fa-solid fa-magnifying-glass me-2"></i>
+                      Consultar RENIEC
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 👤 Nombres (Solo lectura) -->
+              <div class="col-md-4">
+                <label class="form-label"> Nombres </label>
+                <input type="text" class="form-control custom-input readonly-field" readonly
+                  [(ngModel)]="inquilinoForm.nombres" />
+              </div>
+
+              <!-- 👤 Apellido Paterno (Solo lectura) -->
+              <div class="col-md-4">
+                <label class="form-label"> Apellido Paterno </label>
+                <input type="text" class="form-control custom-input readonly-field" readonly
+                  [(ngModel)]="inquilinoForm.apePaterno" />
+              </div>
+
+              <!-- 👤 Apellido Materno (Solo lectura) -->
+              <div class="col-md-4">
+                <label class="form-label"> Apellido Materno </label>
+                <input type="text" class="form-control custom-input readonly-field" readonly
+                  [(ngModel)]="inquilinoForm.apeMaterno" />
+              </div>
+
+              <!-- 📧 Correo -->
+              <div class="col-md-6">
+                <label class="form-label"> Correo </label>
+                <input type="email" name="correoInq" class="form-control custom-input"
+                  [(ngModel)]="inquilinoForm.correo" #correoRef="ngModel" [ngClass]="{
+              'is-invalid': correoRef.invalid && (correoRef.dirty || correoRef.touched),
+            }" placeholder="ejemplo@correo.com" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+                <div class="invalid-feedback fw-semibold text-danger mt-1">
+                  <i class="fa-solid fa-circle-exclamation me-1"></i> Completa con un formato de correo
+                  válido.
+                </div>
+              </div>
+
+              <!-- 📱 Celular -->
+              <div class="col-md-6">
+                <label class="form-label"> Celular </label>
+                <input type="text" name="celularInq" maxlength="9" class="form-control custom-input"
+                  [(ngModel)]="inquilinoForm.celular" #celularRef="ngModel" [ngClass]="{
+              'is-invalid': celularRef.invalid && (celularRef.dirty || celularRef.touched),
+            }" placeholder="Ej: 987654321" required pattern="^9\d{8}$" />
+                <div class="invalid-feedback fw-semibold text-danger mt-1">
+                  <i class="fa-solid fa-circle-exclamation me-1"></i> Debe iniciar con 9 y tener 9
+                  dígitos.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label"> Fecha de entrada </label>
+
+                <input type="date" class="form-control custom-input" [(ngModel)]="inquilinoForm.fechaInicio" />
+              </div>
+              <!-- 🏠 Asignar Cuarto -->
+              <div class="col-12">
+                <label class="form-label">Asignar Cuarto</label>
+
+                <div class="row g-3">
+
+                  <!-- Sede -->
+                  <div class="col-md-4">
+                    <label class="form-label">Sede</label>
+                    <select class="form-select custom-input" [(ngModel)]="codsedeSeleccionada" (change)="cargarPisos()">
+
+                      <option [ngValue]="null">Seleccione una sede</option>
+
+                      <option *ngFor="let sede of sedes" [ngValue]="sede.codsede">
+                        {{ sede.nombre }}
+                      </option>
+
+                    </select>
+                  </div>
+
+                  <!-- Piso -->
+                  <div class="col-md-4">
+                    <label class="form-label">Piso</label>
+                    <select class="form-select custom-input" [(ngModel)]="codpisoSeleccionado"
+                      (change)="cargarCuartos()">
+
+                      <option [ngValue]="null">Seleccione un piso</option>
+
+                      <option *ngFor="let piso of pisosDisponibles" [ngValue]="piso.codpiso">
+                        Piso {{ piso.numero }}
+                      </option>
+
+                    </select>
+                  </div>
+
+                  <!-- Cuarto -->
+                  <div class="col-md-4">
+                    <label class="form-label">Cuarto</label>
+                    <select class="form-select custom-input" name="cuartoInq" [(ngModel)]="inquilinoForm.codcuar">
+
+                      <option [ngValue]="null">Seleccione un cuarto</option>
+
+                      <option *ngFor="let cuarto of cuartosDisponibles" [ngValue]="cuarto.codcuar">
+                        Cuarto {{ cuarto.numcuar }}
+                      </option>
+
+                    </select>
+
+                    <!-- Validación -->
+                    <div class="invalid-feedback fw-semibold text-danger mt-1">
+                      <i class="fa-solid fa-circle-exclamation me-1"></i>
+                      Es obligatorio seleccionar un cuarto habitable.
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <!-- ⚙️ Estado -->
+              <div class="col-md-6">
+                <label class="form-label"> Estado </label>
+                <input type="text" value="Activo" readonly class="form-control custom-input readonly-field" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 📌 PIE DEL MODAL CON LOS BOTONES DE ACCIÓN -->
+          <div class="modal-footer-custom d-flex justify-content-end gap-2">
+            <button class="btn btn-cancelar" (click)="cerrarModalInquilino()" type="button">
+              Cancelar
+            </button>
+
+            <button class="btn btn-guardar-success" (click)="registrarInquilino()" type="button">
+              <i class="fa-solid fa-user-check me-2"></i>
+              Registrar Inquilino
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <!-- ===================================================== -->
+      <!-- 15.1 MODAL EDITAR INQUILINO -->
+      <!-- ===================================================== -->
+      <div class="modal-overlay" *ngIf="mostrarModalEditarInquilino">
+      
+        <div class="custom-modal">
+      
+          <div class="modal-header-custom bg-primary">
+      
+            <div>
+      
+              <h3 class="modal-title-custom">
+      
+                <i class="fa-solid fa-user-gear me-2"></i>
+      
+                Editar Inquilino
+      
+              </h3>
+      
+              <p class="modal-subtitle">
+      
+                Actualizar información del inquilino
+      
+              </p>
+      
+            </div>
+            <button class="btn-close-custom" type="button" (click)="cerrarModalEditarInquilino()">
+
+              <i class="fa-solid fa-xmark"></i>
+
+            </button>
+          </div>
+          <div class="modal-body-custom">
+          <!-- 🎉 ALERTA DE CRITERIO DE ACEPTACIÓN / ÉXITO -->
+          <div *ngIf="mostrarAlertaExitoInquilino"
+            class="alert alert-success d-flex align-items-center mb-4 p-3 custom-alert-success" role="alert" style="
+                            border-left: 5px solid #198754;
+                            background-color: #d1e7dd;
+                            color: #0f5132;
+                            border-radius: 8px;
+                          ">
+            <i class="fa-solid fa-circle-check fs-4 me-3 text-success"></i>
+            <div>
+              <strong class="d-block text-success" style="font-size: 1.05rem">¡Operación Exitosa!</strong>
+              <span style="font-size: 0.95rem">El inquilino ha sido registrado correctamente en el sistema y el cuarto
+                seleccionado ha
+                sido asignado.</span>
+            </div>
+          </div>
+      
+          <div class="row g-3">
+            <!-- 📄 Sección Unificada: Tipo, Número Documento y Botón Consultar RENIEC -->
+            <div class="col-12">
+              <div class="row g-3 align-items-end">
+                <!-- Tipo Documento -->
+                <div class="col-md-4">
+                  <label class="form-label"> Tipo Documento </label>
+                  <select class="form-select custom-input">
+                    <option>DNI</option>
+                    <option>Pasaporte</option>
+                    <option>Carnet Extranjería</option>
+                  </select>
+                </div>
+      
+                <!-- Número Documento -->
+                <div class="col-md-4">
+                  <label class="form-label"> Número Documento </label>
+                  <input type="text" name="dniBusqueda" class="form-control custom-input" maxlength="8"
+                    placeholder="Ingrese DNI" [(ngModel)]="dniBusqueda" #dniRef="ngModel"
+                    [ngClass]="{ 'is-invalid': dniRef.invalid && (dniRef.dirty || dniRef.touched) }" required
+                    pattern="^\d{8}$" readonly />
+                  <div class="invalid-feedback fw-semibold text-danger mt-1">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> DNI inválido (8 dígitos).
+                  </div>
+                </div>
+      
+                <!-- Botón Consultar RENIEC -->
+                <div class="col-md-4">
+                  <button class="btn btn-reniec w-100" (click)="buscarDni()" type="button">
+                    <i class="fa-solid fa-magnifying-glass me-2" disabled></i>
+                    No disponible
+                  </button>
+                </div>
+              </div>
+            </div>
+      
+            <!-- 👤 Nombres (Solo lectura) -->
+            <div class="col-md-4">
+              <label class="form-label"> Nombres </label>
+              <input type="text" class="form-control custom-input readonly-field" readonly
+                [(ngModel)]="inquilinoForm.nombres" />
+            </div>
+      
+            <!-- 👤 Apellido Paterno (Solo lectura) -->
+            <div class="col-md-4">
+              <label class="form-label"> Apellido Paterno </label>
+              <input type="text" class="form-control custom-input readonly-field" readonly
+                [(ngModel)]="inquilinoForm.apePaterno" />
+            </div>
+      
+            <!-- 👤 Apellido Materno (Solo lectura) -->
+            <div class="col-md-4">
+              <label class="form-label"> Apellido Materno </label>
+              <input type="text" class="form-control custom-input readonly-field" readonly
+                [(ngModel)]="inquilinoForm.apeMaterno" />
+            </div>
+      
+            <!-- 📧 Correo -->
+            <div class="col-md-6">
+              <label class="form-label"> Correo </label>
+              <input type="email" name="correoInq" class="form-control custom-input" [(ngModel)]="inquilinoForm.correo"
+                #correoRef="ngModel" [ngClass]="{
+                                'is-invalid': correoRef.invalid && (correoRef.dirty || correoRef.touched),
+                              }" placeholder="ejemplo@correo.com" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+              <div class="invalid-feedback fw-semibold text-danger mt-1">
+                <i class="fa-solid fa-circle-exclamation me-1"></i> Completa con un formato de correo
+                válido.
+              </div>
+            </div>
+      
+            <!-- 📱 Celular -->
+            <div class="col-md-6">
+              <label class="form-label"> Celular </label>
+              <input type="text" name="celularInq" maxlength="9" class="form-control custom-input"
+                [(ngModel)]="inquilinoForm.celular" #celularRef="ngModel" [ngClass]="{
+                                'is-invalid': celularRef.invalid && (celularRef.dirty || celularRef.touched),
+                              }" placeholder="Ej: 987654321" required pattern="^9\d{8}$" />
+              <div class="invalid-feedback fw-semibold text-danger mt-1">
+                <i class="fa-solid fa-circle-exclamation me-1"></i> Debe iniciar con 9 y tener 9
+                dígitos.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"> Fecha de entrada </label>
+      
+              <input type="date" class="form-control custom-input" [(ngModel)]="inquilinoForm.fechaInicio" readonly />
+            </div>
+            <!-- 🏠 Asignar Cuarto -->
+            <div class="col-12">
+      
+            </div>
+            <!-- ⚙️ Estado -->
+            <div class="col-md-6">
+              <label class="form-label"> Estado </label>
+              <input type="text" value="Activo" readonly class="form-control custom-input readonly-field" />
+            </div>
+
+            <hr class="my-4">
+        
+            <div class="mover-cuarto-header"
+                (click)="togglePanelMoverCuarto()">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid"
+                      [ngClass]="mostrarPanelMoverCuarto ? 'fa-chevron-down' : 'fa-chevron-right'">
+                    </i>
+                    <span class="ms-2 fw-semibold">
+                        Mover a otro cuarto
+                    </span>
+                </div>
+            </div>
+                    <div class="panel-mover-cuarto"
+     *ngIf="mostrarPanelMoverCuarto">
+            <div class="card border mb-3">
+
+    <div class="card-header bg-light">
+
+        <strong>
+
+            <i class="fa-solid fa-location-dot me-2"></i>
+
+            Ubicación actual
+
+        </strong>
+
+    </div>
+    <div class="card-body">
+
+        <p>
+
+            <strong>Sede:</strong>
+
+            {{ inquilinoForm.nombreSede }}
+
+        </p>
+
+        <p>
+            <strong>Piso:</strong>
+            {{ inquilinoForm.numeroPiso }}
+        </p>
+
+        <p>
+
+            <strong>Cuarto:</strong>
+
+            {{ inquilinoForm.numeroCuarto }}
+
+        </p>
+
+    </div>
+
+            </div>
+    <div class="alert alert-warning">
+
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+        Cambiar de cuarto mantendrá el contrato actual, únicamente
+        cambiará la habitación asignada.
+
+    </div>
+
+    <div class="row g-3">
+
+        <!-- Sede -->
+
+        <div class="col-md-4">
+
+            <label class="form-label">
+
+                Nueva sede
+
+            </label>
+
+            <select
+                class="form-select"
+
+                [(ngModel)]="codSedeNueva"
+
+                (change)="cambioSedeMover()">
+
+                <option [ngValue]="null">
+
+                    Seleccione
+
+                </option>
+
+                <option
+                    *ngFor="let sede of sedes"
+
+                    [ngValue]="sede.codsede">
+
+                    {{sede.nombre}}
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- Piso -->
+
+        <div class="col-md-4">
+
+            <label class="form-label">
+
+                Nuevo piso
+
+            </label>
+
+            <select
+                class="form-select"
+
+                [(ngModel)]="codPisoNueva"
+
+                (change)="cambioPisoMover()">
+
+                <option [ngValue]="null">
+
+                    Seleccione
+
+                </option>
+
+                <option
+                    *ngFor="let piso of pisosDisponiblesMover"
+
+                    [ngValue]="piso.codpiso">
+
+                    Piso {{piso.numero}}
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- Cuarto -->
+
+        <div class="col-md-4">
+
+            <label class="form-label">
+
+                Nuevo cuarto
+
+            </label>
+
+            <select
+                class="form-select"
+
+                [(ngModel)]="codCuartoNueva">
+
+                <option [ngValue]="null">
+
+                    Seleccione
+
+                </option>
+
+              <option
+                  *ngFor="let cuarto of cuartosDisponiblesMover"
+                  [ngValue]="cuarto.codcuar">
+
+                  Cuarto {{ cuarto.numcuar }}
+                  {{ cuarto.codcuar === codCuartoOriginal ? '(Actual)' : '' }}
+                  - {{ cuarto.estcuar }}
+
+              </option>
+            </select>
+
+        </div>
+
+    </div>
+
+    <div class="text-end mt-3">
+
+        <button
+            class="btn btn-outline-secondary"
+
+            (click)="cancelarCambioCuarto()">
+
+            Cancelar cambio
+
+        </button>
+
+    </div>
+
+</div>
+          </div>
+        </div>
+
+              <!-- 📌 PIE DEL MODAL CON LOS BOTONES DE ACCIÓN -->
+          <div class="modal-footer-custom d-flex justify-content-end gap-2">
+            <button class="btn btn-cancelar" (click)="cerrarModalEditarInquilino()" type="button">
+              Cancelar
+            </button>
+      
+            <button class="btn btn-guardar-success" (click)="guardarCambiosInquilino()" type="button">
+              <i class="fa-solid fa-user-check me-2"></i>
+              Guardar Cambios
+            </button>
+          </div>
+        <button class="btn-close-custom" (click)="cerrarModalEditarInquilino()">
+      
+          <i class="fa-solid fa-xmark"></i>
+      
+        </button>
+        </div>      
+      </div>
+      <!-- ===================================================== -->
+      <!-- 16. MODAL DOCUMENTOS DEL INQUILINO -->
+      <!-- ===================================================== -->
+      <div *ngIf="mostrarDocumentos" class="modal-overlay d-flex justify-content-center align-items-center">
+        <app-documento [inquilino]="inquilinoSeleccionado" (cerrarModal)="cerrarDocumentos()">
+        </app-documento>
+      </div>
+
+      <div class="modal-overlay" *ngIf="mostrarGestionServicio">
+        <app-servicio (cerrarModal)="cerrarServicio()" (actualizarMetricas)="cargarMetricas()">
+        </app-servicio>
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- 17. MODAL CONTRATO FINALIZADO DEL INQUILINO -->
+      <!-- ===================================================== -->
+      <div class="modal-overlay" *ngIf="mostrarModalContratosFinalizados">
+        <div class="Inquilino-modal custom-modal modal-lg Inquilino-modal">
+          <div class="modal-header-custom">
+            <h3>
+              <i class="fa-solid fa-user-clock me-2"></i>
+              Contratos Finalizados
+            </h3>
+            <button class="btn-close-custom" (click)="cerrarModalContratosFinalizados()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="modal-body-custom">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Inquilino</th>
+                  <th>Sede</th>
+                  <th>Piso</th>
+                  <th>Cuarto</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let i of contratosFinalizados">
+                  <td>
+                    {{i.nombreCompleto}}
+                  </td>
+                  <td>
+                    {{i.nombreSede}}
+                  </td>
+                  <td>
+                    {{i.numeroPiso}}
+                  </td>
+                  <td>
+                    {{i.numCuarto}}
+                  </td>
+                  <td>
+                    {{i.fechaInicio}}
+                  </td>
+                  <td>
+                    {{i.fechaFin}}
+                  </td>
+                  <td>
+                    <button class="btn btn-success btn-sm" (click)="reanudarContrato(i)">
+                      <i class="fa-solid fa-rotate-left"></i>
+                      Reanudar
+                    </button>
+                    <button class="btn btn-primary btn-sm ms-2">
+                      <i class="fa-solid fa-right-left"></i>
+                      Otro cuarto
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+<!-- ===================================================== -->
+<!-- 17. MODAL METRICAS -->
+<!-- ===================================================== -->
+ <app-modal-metricas
+    *ngIf="mostrarModalMetricas"
+    (cerrarModal)="cerrarMetricas()">
+</app-modal-metricas>
+      <!-- ===================================================== -->
+      <!-- 17. MODAL Historicos -->
+      <!-- ===================================================== -->
+      <app-modal-historicos *ngIf="mostrarModalHistoricos" (cerrarModal)="cerrarModalHistoricos()">
+      </app-modal-historicos>

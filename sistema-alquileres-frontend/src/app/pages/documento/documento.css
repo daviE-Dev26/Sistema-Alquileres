@@ -1,0 +1,137 @@
+/* === SOLO PARA QUE EL MODAL HERDE EL MISMO ESTILO === */
+
+/* Overlay igual */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Caja del modal igual */
+.custom-modal {
+  width: 100%;
+  max-width: 950px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: modalFade 0.25s ease;
+}
+
+/* Animación */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header igual al dashboard */
+.modal-header-custom {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+  padding: 25px 30px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Botón cerrar igual */
+.btn-close-custom {
+  border: none;
+  background: rgba(255,255,255,.15);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn-close-custom:hover {
+  background: rgba(255,255,255,.25);
+  transform: rotate(90deg);
+}
+
+/* Body y footer */
+.modal-body-custom {
+  padding: 30px;
+}
+
+.modal-footer-custom {
+  padding: 20px 30px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Inputs iguales */
+.custom-input {
+  border-radius: 12px;
+  border: 1px solid #dcdfe4;
+  padding: 12px 14px;
+  transition: .2s;
+}
+
+.custom-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 4px rgba(25,118,210,.12);
+  outline: none;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+.table-custom {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table th {
+  font-weight: 700;
+  color: #495057;
+}
+
+table td {
+  vertical-align: middle;
+}
+.btn-guardar {
+  background: #1976d2 !important;
+  color: white !important;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+  transition: .2s;
+}
+
+.btn-guardar:hover {
+  background: #1565c0 !important;
+  transform: translateY(-2px);
+}
+
+.btn-cancelar {
+  background: #e9ecef !important;
+  color: #333 !important;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+}
+
+.btn-cancelar:hover {
+  background: #dee2e6 !important;
+}

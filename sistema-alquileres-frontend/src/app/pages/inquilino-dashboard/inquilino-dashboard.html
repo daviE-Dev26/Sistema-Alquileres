@@ -1,0 +1,250 @@
+<div class="portal-container" *ngIf="datosCuarto">
+
+  <nav class="portal-navbar">
+    <div class="nav-left">
+      <i class="fa-solid fa-house text-white fs-5"></i>
+      <span class="navbar-title">Portal del Inquilino - Cuarto {{ datosCuarto?.numcuar}} -
+        {{datosCuarto?.nomsede}}</span>
+    </div>
+
+    <div class="nav-right">
+      <div class="user-avatar">{{getIniciales()}}</div>
+      <div class="user-info">
+        <span class="user-name" role="button" (click)="mostrarModalEdicion = true">
+          {{ getNombreMostrar() }}
+        </span>
+      </div>
+      <button class="btn-logout" (click)="cerrarSesion()">
+        <i class="fa-solid fa-right-from-bracket"></i> SALIR
+      </button>
+    </div>
+  </nav>
+
+  <div class="portal-content">
+    <h1 class="welcome-title mb-3">Bienvenido {{getNombreMostrar()}}</h1>
+    
+    <div class="row g-4">
+      <div class="col-md-6">
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+              <div class="metric-icon-wrapper text-primary">
+                <i class="fa-solid fa-credit-card"></i>
+              </div>
+              <div class="metric-data">
+                <h3>S/ {{ datosCuarto?.preccuar}}</h3>
+                <p>Renta Mensual</p>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+              <div class="metric-icon-wrapper text-warning">
+                <i class="fa-solid fa-comment-dots"></i>
+              </div>
+              <div class="metric-data">
+                <h3>0</h3>
+                <p>Anuncios Nuevos</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+              <div class="metric-icon-wrapper text-success">
+                <i class="fa-solid fa-wrench"></i>
+              </div>
+              <div class="metric-data">
+                <h3>0</h3>
+                <p>Alertas de Mantenimiento</p>
+              </div>
+            </div>
+          </div> -->
+        </div>
+
+        <div class="row g-3 text-center">
+          <div class="col-12">
+            <div class="info-card shadow-sm">
+              <div class="card-header-custom">Detalles del Contrato</div>
+              <div class="card-body-custom">
+                <div class="row text-center">
+                  <div class="col-md-3">
+                    <span class="contrato-label">Cuarto</span>
+                    <span class="contrato-value fw-bold d-block">{{ datosCuarto?.numcuar}}</span>
+                  </div>
+                  <div class="col-md-3">
+                    <span class="contrato-label">Dirección</span>
+                    <span class="contrato-value d-block">{{ datosCuarto?.dircuar}}</span>
+                  </div>
+                  <div class="col-md-3">
+                    <span class="contrato-label">Renta Mensual</span>
+                    <span class="contrato-value fw-bold d-block">S/ {{ datosCuarto?.preccuar}}</span>
+                  </div>
+                  <div class="col-md-3">
+                    <span class="contrato-label">Próximo Pago</span>
+                    <span class="contrato-value d-block">{{datosCuarto?.fechout}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- ✅ SECCIÓN DE PAGOS DINÁMICA -->
+      <div class="col-md-6">
+        <div class="info-card shadow-sm">
+          <div class="card-header-custom">
+            <i class="fa-solid fa-calculator me-2"></i> Estado de Pagos
+          </div>
+          <div class="card-body-custom">
+
+            <!-- Mensaje si no hay pagos pendientes -->
+            <div *ngIf="pagosInquilino.length === 0" class="text-center text-muted py-3">
+              <i class="fa-solid fa-check-circle text-success"></i>
+              <p class="mb-0">Estás al día con tus pagos</p>
+            </div>
+
+            <!-- Lista dinámica de los próximos 3 meses -->
+            <div *ngFor="let pago of pagosInquilino" class="payment-item">
+              <div class="payment-info">
+                <span class="payment-month">
+                  {{ getNombreMes(pago.mes) }} {{ pago.anio }}
+                </span>
+                <span class="payment-due">
+                  S/ {{ pago.monto }}
+                </span>
+                <span *ngIf="pago.numero_comprobante" class="text-muted" style="font-size: 0.7rem;">
+                  {{ pago.numero_comprobante }}
+                </span>
+              </div>
+              <span class="badge" [ngClass]="getBadgeEstado(pago.estado)">
+                <i class="fa-solid" 
+                   [ngClass]="pago.estado === 'PAGADO' ? 'fa-circle-check' : 'fa-clock'">
+                </i>
+                {{ getTextoEstado(pago.estado) }}
+              </span>
+            </div>
+
+          </div>
+          
+          <div class="d-flex gap-2 w-100 mt-3">
+            <button class="btn btn-success flex-grow-1" (click)="mostrarModalPago = true">
+              <i class="fa-solid fa-credit-card me-2"></i> Pagar alquiler
+            </button>
+            
+            <button class="btn btn-outline-primary flex-grow-1" (click)="mostrarModalTransferencia = true">
+              <i class="fa-solid fa-file-arrow-up me-2"></i> Subir Comprobante
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+      
+      <div class="col-12 col-md-6">
+        <div class="info-card shadow-sm">
+          <div class="card-header-custom">
+            <i class="fa-solid fa-folder-open me-2"></i> Mis Documentos
+          </div>
+          <div class="card-body-custom d-flex flex-column justify-content-between h-100">
+            <div class="list-wrapper">
+              <p class="text-muted small mb-3">
+                Aquí puedes visualizar los documentos y contratos asociados a tu alquiler. 
+                Si necesitas actualizar algo, contacta a la administración.
+              </p>
+              <div class="maintenance-item" *ngIf="!cargandoDocumentos">
+                <div>
+                  <h5 class="item-title">Contrato de Alquiler</h5>
+                  <span class="item-date">Tipo: Contrato</span>
+                </div>
+                <span class="badge status-completed">Disponible</span>
+              </div>
+            </div>
+            <button class="btn btn-outline-primary w-100 mt-3 py-2 btn-action-custom" (click)="abrirDocumentosInquilino()">
+              <i class="fa-solid fa-eye me-2"></i> VER MIS DOCUMENTOS
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE DOCUMENTOS PARA EL INQUILINO (SOLO LECTURA) -->
+<div *ngIf="mostrarDocumentosInquilino" class="modal-overlay d-flex justify-content-center align-items-center">
+  <app-documento 
+    [inquilino]="datosInquilinoActual" 
+    [soloLectura]="true" 
+    (cerrarModal)="cerrarDocumentosInquilino()">
+  </app-documento>
+</div>
+
+<app-modal-edicion
+  *ngIf="mostrarModalEdicion"
+  [datosInquilino]="datosCuarto"
+  (cerrar)="mostrarModalEdicion = false"
+  (actualizado)="actualizarDatosInquilino($event)">
+</app-modal-edicion>
+
+<app-modal-pago
+  *ngIf="mostrarModalPago"
+  [codasig]="datosCuarto.codasig"
+  [precioMensual]="datosCuarto.preccuar"
+  [mesesPendientes]="12"
+  [correo]="datosCuarto.corinq"
+  (cerrar)="mostrarModalPago=false">
+</app-modal-pago>
+
+<!-- MODAL SUBIR COMPROBANTE DE TRANSFERENCIA -->
+<div *ngIf="mostrarModalTransferencia" class="modal-overlay d-flex justify-content-center align-items-center">
+  <div class="custom-modal" style="max-width: 500px;">
+    <div class="modal-header-custom">
+      <h3>
+        <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+        Subir comprobante de transferencia
+      </h3>
+      <button class="btn-close-custom" (click)="cerrarModalTransferencia()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body-custom">
+      <p class="text-muted small mb-3">
+        Adjunte la captura o PDF de su transferencia bancaria. 
+        Este archivo se guardará automáticamente en sus documentos como tipo "Recibo".
+      </p>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Seleccionar archivo</label>
+        <input 
+          type="file" 
+          class="form-control" 
+          (change)="onFileTransferenciaChange($event)" 
+          accept=".pdf,.jpg,.jpeg,.png">
+        <small class="text-muted">Formatos: PDF, JPG, PNG</small>
+      </div>
+
+      <div *ngIf="errorTransferencia" class="alert alert-danger py-2">
+        <i class="fa-solid fa-circle-exclamation me-2"></i> {{ errorTransferencia }}
+      </div>
+      
+      <div *ngIf="exitoTransferencia" class="alert alert-success py-2">
+        <i class="fa-solid fa-circle-check me-2"></i> Comprobante subido correctamente.
+      </div>
+    </div>
+
+    <div class="modal-footer-custom d-flex justify-content-end gap-2">
+      <button class="btn btn-cancelar" (click)="cerrarModalTransferencia()">Cancelar</button>
+      <button 
+        class="btn btn-guardar" 
+        (click)="subirComprobanteTransferencia()" 
+        [disabled]="!archivoTransferencia">
+        <i class="fa-solid fa-upload me-2"></i> Subir comprobante
+      </button>
+    </div>
+  </div>
+</div>

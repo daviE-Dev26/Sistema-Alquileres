@@ -1,0 +1,174 @@
+<div class="body-registro">
+  <div class="registro-card">
+    <a routerLink="/login/propietario" class="back-button">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+
+    <div class="text-center">
+      <div class="registro-icon">
+        <i class="fa-solid fa-file-signature"></i>
+      </div>
+
+      <h2 class="titulo">Solicitud de Registro</h2>
+
+      <p class="subtitulo">Completa tus datos para solicitar acceso</p>
+    </div>
+
+    <form #formRegistro="ngForm" (ngSubmit)="registrar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <input
+            type="text"
+            [(ngModel)]="nomusu"
+            name="nomusu"
+            class="form-control"
+            placeholder="Nombres *"
+            required
+            maxlength="40"
+            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
+            #nom="ngModel"
+          />
+
+          <small class="text-danger" *ngIf="nom.invalid && nom.touched">
+            Solo letras y espacios
+          </small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <input
+            type="text"
+            [(ngModel)]="apepusu"
+            name="apepusu"
+            class="form-control"
+            placeholder="Apellido paterno *"
+            required
+            maxlength="40"
+            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
+            #apep="ngModel"
+          />
+
+          <small class="text-danger" *ngIf="apep.invalid && apep.touched">
+            Solo letras y espacios
+          </small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          [(ngModel)]="apemusu"
+          name="apemusu"
+          class="form-control"
+          placeholder="Apellido materno *"
+          required
+          maxlength="40"
+          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
+          #apem="ngModel"
+        />
+
+        <small class="text-danger" *ngIf="apem.invalid && apem.touched">
+          Solo letras y espacios
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          [(ngModel)]="docusu"
+          name="docusu"
+          class="form-control"
+          placeholder="Documento *"
+          required
+          maxlength="8"
+          minlength="8"
+          pattern="(?!000)[0-9]{8}"
+          #doc="ngModel"
+        />
+
+        <small class="text-danger" *ngIf="doc.invalid && doc.touched">
+          Debe tener 8 dígitos y ser valido
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          [(ngModel)]="dirusu"
+          name="dirusu"
+          class="form-control"
+          placeholder="Dirección *"
+          required
+          maxlength="100"
+        />
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          [(ngModel)]="celusu"
+          name="celusu"
+          class="form-control"
+          placeholder="Celular *"
+          required
+          maxlength="9"
+          minlength="9"
+          pattern="[0-9]{9}"
+          #cel="ngModel"
+        />
+
+        <small class="text-danger" *ngIf="cel.invalid && cel.touched">
+          El celular debe tener 9 dígitos
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="email"
+          [(ngModel)]="corusu"
+          name="corusu"
+          class="form-control"
+          placeholder="Correo electrónico *"
+          required
+          email
+          #correo="ngModel"
+        />
+
+        <small class="text-danger" *ngIf="correo.invalid && correo.touched">
+          Correo inválido
+        </small>
+      </div>
+
+      <div class="mb-4">
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          class="form-control"
+          placeholder="Contraseña *"
+          required
+          minlength="8"
+          pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$"
+          #pass="ngModel"
+        />
+
+        <small class="text-danger" *ngIf="pass.invalid && pass.touched">
+          Mínimo 8 caracteres, 1 mayúscula y 1 número
+        </small>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100 btn-enviar"
+        [disabled]="formRegistro.invalid"
+      >
+        ENVIAR SOLICITUD
+      </button>
+    </form>
+
+    <div *ngIf="mensaje" class="alert alert-success mt-4">
+      {{ mensaje }}
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger mt-4">Error al enviar solicitud</div>
+  </div>
+</div>

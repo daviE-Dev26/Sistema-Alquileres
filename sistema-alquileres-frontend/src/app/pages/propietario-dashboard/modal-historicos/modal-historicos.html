@@ -1,0 +1,247 @@
+<div class="modal-overlay">
+
+    <div class="modal-historicos">
+
+        <div class="modal-header">
+
+            <h2>Reportes históricos</h2>
+
+            <button type="button" class="btn-cerrar" (click)="cerrar()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="tabs-historicos">
+
+            <button type="button" [class.tab-activa]="tabSeleccionada === 'datos'" (click)="seleccionarTab('datos')">
+                Historial de inquilinos
+            </button>
+
+            <button type="button" [class.tab-activa]="tabSeleccionada === 'cuartos'"
+                (click)="seleccionarTab('cuartos')">
+                Historial de cuartos
+            </button>
+
+        </div>
+
+        <!-- HISTORIAL DE DATOS PERSONALES -->
+
+        <div *ngIf="tabSeleccionada === 'datos'">
+
+            <div class="contenedor-buscador">
+
+                <label for="dniDatos">
+                    DNI del inquilino
+                </label>
+
+                <div class="grupo-buscador">
+
+                    <input id="dniDatos" type="text" maxlength="8" placeholder="Ingrese DNI" [(ngModel)]="dniDatos"
+                        (keyup.enter)="buscarHistoricoDatos()">
+
+                    <button type="button" class="btn-buscar" [disabled]="cargandoDatos"
+                        (click)="buscarHistoricoDatos()">
+
+                        {{ cargandoDatos ? 'Buscando...' : 'Buscar' }}
+
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" (click)="verTodosHistoricoDatos()"
+                        [disabled]="cargandoDatos">
+
+                        Ver todos
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <p *ngIf="mensajeDatos" class="mensaje-resultado">
+
+                {{ mensajeDatos }}
+
+            </p>
+
+            <div *ngIf="historicoDatos.length > 0" class="contenedor-tabla">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>DNI</th>
+                            <th>Nombre completo</th>
+                            <th>Celular</th>
+                            <th>Correo</th>
+                            <th>Evento</th>
+                            <th>Fecha</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let registro of historicoDatos">
+
+                            <td>
+                                {{ registro.docinq }}
+                            </td>
+
+                            <td>
+                                {{ registro.nominq }}
+                                {{ registro.apepinq }}
+                                {{ registro.apeminq }}
+                            </td>
+
+                            <td>
+                                {{ registro.celinq }}
+                            </td>
+
+                            <td>
+                                {{ registro.corinq }}
+                            </td>
+
+                            <td>
+                                {{ registro.tipoMovimiento }}
+                            </td>
+
+                            <td>
+                                {{ registro.fechaMovimiento | date:'dd/MM/yyyy HH:mm' }}
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- HISTORIAL DE CUARTOS -->
+
+        <div *ngIf="tabSeleccionada === 'cuartos'">
+
+            <div class="contenedor-buscador">
+
+                <label for="dniCuartos">
+                    DNI del inquilino
+                </label>
+
+                <div class="grupo-buscador">
+
+                    <input id="dniCuartos" type="text" maxlength="8" placeholder="Ingrese DNI" [(ngModel)]="dniCuartos"
+                        (keyup.enter)="buscarHistoricoCuartos()">
+
+                    <button type="button" class="btn-buscar" [disabled]="cargandoCuartos"
+                        (click)="buscarHistoricoCuartos()">
+
+                        {{ cargandoCuartos ? 'Buscando...' : 'Buscar' }}
+
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" (click)="verTodosHistoricoCuartos()"
+                        [disabled]="cargandoCuartos">
+
+                        Ver todos
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <p *ngIf="mensajeCuartos" class="mensaje-resultado">
+
+                {{ mensajeCuartos }}
+
+            </p>
+
+            <div *ngIf="historicoCuartos.length > 0" class="contenedor-tabla">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>DNI</th>
+                            <th>Nombre completo</th>
+                            <th>Sede</th>
+                            <th>Piso</th>
+                            <th>Cuarto</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Monto</th>
+                            <th>Evento</th>
+                            <th>Fecha</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let registro of historicoCuartos">
+
+                            <td>
+                                {{ registro.inquilino?.docinq || registro.docinq || '-' }} </td>
+
+                            <td>
+                                {{ registro.inquilino?.nominq || registro.nominq || '' }}
+                                {{ registro.inquilino?.apepinq || registro.apepinq || '' }}
+                                {{ registro.inquilino?.apeminq || registro.apeminq || '' }}
+                            </td>
+
+                            <td>
+                                {{ registro.cuarto?.sede?.nombre || registro.nombreSede || '-' }}
+                            </td>
+
+                            <td>
+                                {{ registro.cuarto?.piso?.numero || registro.numeroPiso || '-' }}
+                            </td>
+
+                            <td>
+                                {{ registro.cuarto?.numcuar || registro.numeroCuarto || '-' }}
+                            </td>
+
+                            <td>
+                                {{ registro.fechin
+                                ? (registro.fechin | date:'dd/MM/yyyy')
+                                : '-' }}
+                            </td>
+
+                            <td>
+                                {{ registro.fechout
+                                ? (registro.fechout | date:'dd/MM/yyyy')
+                                : '-' }}
+                            </td>
+
+                            <td>
+                                S/ {{ (registro.montoTotal || 0) | number:'1.2-2' }}
+                            </td>
+
+                            <td>
+                                {{ registro.tipoMovimiento || '-' }}
+                            </td>
+
+                            <td>
+                                {{ registro.fechaMovimiento
+                                ? (registro.fechaMovimiento | date:'dd/MM/yyyy HH:mm')
+                                : '-' }}
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

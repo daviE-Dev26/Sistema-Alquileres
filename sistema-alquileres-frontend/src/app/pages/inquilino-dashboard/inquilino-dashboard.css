@@ -1,0 +1,594 @@
+/* CONTENEDOR RAÍZ */
+.portal-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fcfcfc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* NAVBAR VERDE DEL MODELO */
+.portal-navbar {
+  width: 100%;
+  background-color: #2e7d32;
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-title {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  background-color: #c62828;
+  /* Círculo rojo de inicial */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-right: 20px;
+  line-height: 1.2;
+}
+
+.user-name {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.user-name:hover{
+    text-decoration: underline;
+    opacity: .9;
+}
+.user-code {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+  padding-left: 15px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-logout:hover {
+  opacity: 1;
+}
+
+/* LAYOUT DE CONTENIDO */
+
+.welcome-title {
+  font-size: 1.9rem;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+
+.subtitle-address {
+  color: #8c8c8c;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+/* MINI CARDS DE MÉTRICAS */
+.metrics-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.metric-card {
+  background: white;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width:100%;
+}
+
+.metric-icon-wrapper {
+  font-size: 1.8rem;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+}
+
+.metric-data h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.metric-data p {
+  margin: 0;
+  color: #7a7a7a;
+  font-size: 0.85rem;
+}
+
+/* SECCIONES CUADRADAS BLANCAS (PAGOS, MANTENIMIENTO, ANUNCIOS) */
+.info-card {
+  background: white;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+    width:100%;
+}
+
+.card-header-custom {
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-body-custom {
+  padding: 20px 30px;
+  flex-grow: 1;
+}
+
+/* ITEMS DE FILAS */
+.payment-item,
+.maintenance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.payment-item:last-child,
+.maintenance-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.payment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-month {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.payment-due {
+  font-size: 0.78rem;
+  color: #8c8c8c;
+}
+
+/* BADGES DE ESTADO EXÁCTOS */
+.badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: bold;
+}
+
+.badge-pending {
+  background-color: #ef6c00;
+  color: white;
+}
+
+.badge-success {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.status-process {
+  background-color: #0288d1;
+  color: white;
+}
+
+.status-completed {
+  background-color: #2e7d32;
+  color: white;
+}
+
+/* ELEMENTOS DE ANUNCIOS */
+.announcement-item {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.item-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.item-date {
+  font-size: 0.75rem;
+  color: #999;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.item-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* BOTÓN DE NUEVA SOLICITUD */
+.btn-action-custom {
+  border: 1px solid #dcdcdc;
+  background-color: white;
+  color: #0d6efd;
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
+
+.btn-action-custom:hover {
+  background-color: #f8f9fa;
+  border-color: #c8c8c8;
+}
+
+/* HEADER */
+.portal-header {
+  margin-bottom: 25px;
+}
+
+.welcome-title {
+  font-size: 1.85rem;
+  font-weight: 400;
+  color: #222222;
+  margin-bottom: 4px;
+}
+
+.subtitle-address {
+  color: #8a8a8a;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* FILA SUPERIOR: MÉTRICAS + PAGOS */
+.portal-main-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  /* Columna de métricas es más ancha */
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* COLUMNA DE MÉTRICAS */
+.metrics-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.metric-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.metric-icon {
+  font-size: 1.6rem;
+  width: 40px;
+  text-align: center;
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.metric-label {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* CAJAS CONTENEDORAS COMPARTIDAS */
+.info-box {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.box-header {
+  padding: 14px 20px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.box-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+/* FILAS DE LISTAS INTERNAS (PAGOS / MANTENIMIENTO) */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-primary-text,
+.item-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.item-secondary-text,
+.item-date {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* BADGES DE ESTADO */
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-pending {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #ffedd5;
+}
+
+.badge-success {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #dcfce7;
+}
+
+.badge-process {
+  background-color: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #e0f2fe;
+}
+
+/* FILA INFERIOR: MANTENIMIENTO + ANUNCIOS */
+.portal-secondary-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+/* BLOQUE DE ANUNCIOS */
+.announcement-block {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.announcement-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.announcement-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: block;
+  margin-top: 1px;
+}
+
+.announcement-text {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 6px 0 0 0;
+}
+
+/* BOTÓN OUTLINE DE ACCIÓN */
+.btn-action-outline {
+  width: 100%;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #3b82f6;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-action-outline:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* ===================================================== */
+/* DETALLES DEL CONTRATO (TABLA INFERIOR)                */
+/* ===================================================== */
+.portal-content {
+  width: 100%;
+  padding: 30px 40px;
+}
+
+.contrato-container {
+  width: 100%;
+  margin-top: 40px;
+  border-top: 1px solid #e2e8f0;
+  padding: 20px 40px 30px;
+}
+
+.contrato-header-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 14px;
+}
+
+.contrato-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.contrato-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contrato-label {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.contrato-value {
+  font-size: 0.88rem;
+  color: #1e293b;
+}
+
+.fw-bold {
+  font-weight: 600;
+}
+/* ============================================ */
+/* ============================================ */
+/* MODAL DE TRANSFERENCIA CENTRADO */
+/* ============================================ */
+
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+.modal-overlay .custom-modal {
+  position: relative !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+  max-width: 500px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  margin: auto !important;
+}
+
+.modal-overlay .modal-header-custom {
+  background: #007bff !important;
+  color: white !important;
+  padding: 20px !important;
+  border-radius: 8px 8px 0 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.modal-overlay .modal-body-custom {
+  padding: 20px !important;
+}
+
+.modal-overlay .modal-footer-custom {
+  padding: 15px 20px !important;
+  border-top: 1px solid #dee2e6 !important;
+  background: #f8f9fa !important;
+  border-radius: 0 0 8px 8px !important;
+}
+/* RESPONSIVE DESIGN (MÓVILES) */
+@media (max-width: 850px) {
+
+  .portal-main-layout,
+  .portal-secondary-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contrato-row {
+    gap: 16px;
+    flex-direction: column;
+  }
+}
+.portal-wrapper{
+    max-width: 950px;
+    margin: 0 auto;
+}

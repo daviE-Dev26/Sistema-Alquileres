@@ -1,0 +1,239 @@
+<div class="custom-modal">
+
+  <div class="modal-header-custom">
+    <h3 class="modal-title-custom">
+      <i class="fa-solid fa-lightbulb me-2"></i>
+      Gestión de Servicios
+    </h3>
+
+    <button class="btn-close-custom" (click)="cerrar()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-body-custom">
+
+    <!-- LISTAR -->
+    <div *ngIf="modo === 'listar'">
+
+      <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+
+        <button type="button" class="btn btn-guardar" (click)="irCrear()">
+          <i class="fa-solid fa-circle-plus me-2"></i>
+          Registrar Servicio
+        </button>
+
+        Filtrar por Tipo:
+
+        <select class="form-select custom-input w-auto" [(ngModel)]="filtroTipo" (change)="cargar()">
+          <option value="">Todos</option>
+          <option value="Luz">Luz</option>
+          <option value="Agua">Agua</option>
+          <option value="Internet">Internet</option>
+          <option value="Gas">Gas</option>
+          <option value="Mantenimiento">Mantenimiento</option>
+          <option value="Otros">Otros</option>
+        </select>
+
+        Filtrar por Sede:
+        
+        <select class="form-select custom-input w-auto" [(ngModel)]="filtroSede" (change)="cargar()">
+
+          <option [ngValue]="null">Todas</option>
+
+          <option *ngFor="let sede of sedes" [ngValue]="sede.codsede">
+            {{ sede.nombre }}
+          </option>
+
+        </select>
+
+      </div>
+
+      <table class="table table-hover align-middle table-custom">
+
+        <thead class="table-light">
+          <tr class="text-center">
+            <th>Tipo</th>
+            <th>Fecha Registro</th>
+            <th>Monto</th>
+            <th>Comentarios</th>
+            <th>Sede</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngIf="servicios.length === 0">
+            <td colspan="7" class="text-center text-muted py-4">
+              No hay servicios registrados.
+            </td>
+          </tr>
+
+          <tr *ngFor="let s of servicios" class="text-center">
+
+            <td class="fw-bold">
+              {{ s.tipserv }}
+            </td>
+
+            <td>
+              {{ s.feching | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+
+            <td class="fw-bold text-primary">
+              S/. {{ s.monto }}
+            </td>
+
+            <td class="fw-bold text-primary">
+              {{ s.coment }}
+            </td>
+            <td class="fw-bold text-primary">
+              {{s.sede.nombre}}
+            </td>
+
+            <td>
+
+              <button type="button" class="btn btn-reniec btn-sm" title="Editar" (click)="irEditar(s)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- CREAR -->
+    <div *ngIf="modo === 'crear'">
+
+      <div class="mb-3">
+        <button class="btn btn-cancelar" (click)="irListar()">
+          <i class="fa-solid fa-arrow-left me-2"></i>
+          Volver
+        </button>
+      </div>
+
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Tipo de Servicio</label>
+          <select class="form-select custom-input" [(ngModel)]="servicioForm.tipserv">
+            <option value="" disabled>Selecciona tipo</option>
+            <option value="Luz">Luz</option>
+            <option value="Agua">Agua</option>
+            <option value="Internet">Internet</option>
+            <option value="Gas">Gas</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Otros">Otros</option>
+
+
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Monto</label>
+          <input type="number" class="form-control custom-input" min="1" placeholder="Ej: 85.50"
+            [(ngModel)]="servicioForm.monto">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Sede</label>
+          <select class="form-select custom-input" [(ngModel)]="servicioForm.codsede">
+            <option [ngValue]="null" disabled>Selecciona una sede</option>
+
+            <option *ngFor="let sede of sedes" [ngValue]="sede.codsede">
+              {{ sede.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Comentarios *Opcional</label>
+          <textarea rows="3" class="form-control" [(ngModel)]="servicioForm.coment">
+          </textarea>
+        </div>
+
+        <div *ngIf="errorMsg" class="text-danger fw-bold mt-2">
+          {{ errorMsg }}
+        </div>
+
+      </div>
+
+      <div class="modal-footer-custom mt-4">
+        <button class="btn btn-guardar" (click)="guardar()" [disabled]="!puedeGuardar()">
+          <i class="fa-solid fa-floppy-disk me-2"></i>
+          Guardar Servicio
+        </button>
+      </div>
+
+    </div>
+
+    <!-- EDITAR -->
+    <div *ngIf="modo === 'editar'">
+
+      <div class="mb-3">
+        <button class="btn btn-cancelar" (click)="irListar()">
+          <i class="fa-solid fa-arrow-left me-2"></i>
+          Volver
+        </button>
+      </div>
+
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Tipo de Servicio</label>
+          <select class="form-select custom-input" [(ngModel)]="servicioForm.tipserv">
+            <option value="Luz">Luz</option>
+            <option value="Agua">Agua</option>
+            <option value="Internet">Internet</option>
+            <option value="Gas">Gas</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Otros">Otros</option>
+
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Monto</label>
+          <input type="number" class="form-control custom-input" min="1" [(ngModel)]="servicioForm.monto">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Sede</label>
+          <select class="form-select custom-input" [(ngModel)]="servicioForm.codsede">
+            <option [ngValue]="null" disabled>Selecciona una sede</option>
+
+            <option *ngFor="let sede of sedes" [ngValue]="sede.codsede">
+              {{ sede.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Comentarios *Opcional</label>
+          <textarea rows="3" class="form-control" [(ngModel)]="servicioForm.coment">
+          </textarea>
+        </div>
+
+        <div *ngIf="errorMsg" class="text-danger fw-bold mt-2">
+          {{ errorMsg }}
+        </div>
+
+      </div>
+
+      <div class="modal-footer-custom mt-4">
+        <button class="btn btn-guardar" (click)="actualizar()" [disabled]="!puedeGuardar()">
+          <i class="fa-solid fa-floppy-disk me-2"></i>
+          Actualizar Servicio
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,145 @@
+<div class="custom-modal">
+
+  <!-- HEADER -->
+  <div class="modal-header-custom">
+    <h3 class="modal-title-custom">
+      Documentos de {{ inquilino?.nombreCompleto }}
+            <!-- <-- AGREGAR ESTE BADGE DE SOLO LECTURA -->
+      <span *ngIf="soloLectura" class="badge bg-secondary ms-2" style="font-size: 0.6em; vertical-align: middle;">
+        Solo Lectura
+      </span>
+    </h3>
+
+    <button class="btn-close-custom" (click)="cerrar()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- BODY -->
+
+  <div class="modal-body-custom">
+
+    <!-- ================= LISTAR ================= -->
+    <div *ngIf="modo === 'listar'">
+
+      <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+
+        <button *ngIf="!soloLectura" type="button" class="btn btn-guardar" (click)="irCrear()">
+          <i class="fa-solid fa-file-circle-plus me-2"></i>
+          Agregar Documento
+        </button>
+
+        Filtrar por Tipo: <select class="form-select custom-input w-auto" [(ngModel)]="filtroTipo" (change)="cargar()">
+
+          <option value="">Todos</option>
+          <option value="dni">DNI</option>
+          <option value="contrato">Contrato</option>
+          <option value="recibo">Recibo</option>
+
+        </select>
+
+        <!-- <-- AGREGAR *ngIf="!soloLectura" AL FILTRO DE SOLO ACTIVOS (El inquilino no necesita esto) -->
+        <div *ngIf="!soloLectura" class="form-check form-switch m-0">
+          <label class="form-check-label" for="chkActivos">
+            Solo activos
+          </label>
+          <input class="form-check-input" type="checkbox" [(ngModel)]="soloActivos" (change)="cargar()" id="chkActivos">
+        </div>
+
+      </div>
+
+
+      <table class="table table-hover align-middle table-custom">
+
+        <thead class="table-light">
+          <tr class="text-center">
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tr *ngFor="let d of documentos" class="text-center">
+
+          <td>{{ d.tipdoc }}</td>
+          <td>{{ d.nomdoc }}</td>
+          <td class="text-center">{{d.fechasubida | date:'dd/MM/yyyy HH:mm'}}</td>
+          <td>
+            <span [class.text-success]="d.estdoc" [class.text-danger]="!d.estdoc">
+              {{ d.estdoc ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+              <!-- El inquilino SIEMPRE puede descargar -->
+              <button type="button" class="btn btn-reniec btn-sm" (click)="descargarDocumento(d)" title="Descargar">
+                <i class="fa-solid fa-download me-1"></i>
+              </button>
+
+              <!-- <-- AGREGAR *ngIf="!soloLectura" AL BOTÓN RESTAURAR (Acción administrativa) -->
+              <button *ngIf="!soloLectura" type="button" class="btn btn-reniec btn-sm ms-1" (click)="restaurarDocumento(d)" title="Restaurar">
+                <i class="fa-solid fa-rotate-left me-1"></i>
+              </button>
+
+          </td>
+
+
+        </tr>
+
+      </table>
+
+      <!-- <-- AGREGAR ESTE MENSAJE INFORMATIVO PARA EL INQUILINO -->
+      <div *ngIf="soloLectura" class="alert alert-info mt-3 text-center">
+        <i class="fa-solid fa-info-circle me-2"></i>
+        Solo puedes visualizar y descargar tus documentos. Si necesitas subir o modificar un documento, por favor contacta a la administración.
+      </div>
+    </div>
+
+    <!-- ================= CREAR ================= -->
+    <!-- <-- AGREGAR && !soloLectura PARA QUE NUNCA SE MUESTRE EL FORMULARIO EN MODO LECTURA -->
+    <div *ngIf="modo === 'crear' && !soloLectura">
+
+      <!-- BOTÓN VOLVER (arriba separado) -->
+      <div class="mb-3">
+        <button class="btn btn-cancelar" (click)="irListar()">
+          <i class="fa-solid fa-arrow-left me-2"></i>
+          Volver
+        </button>
+      </div>
+
+      <!-- FORM CONTENIDO -->
+      <div class="d-flex flex-column gap-3">
+
+        <select class="form-select custom-input" [(ngModel)]="documentoForm.tipdoc">
+          <option value="" disabled selected>Selecciona tipo de documento</option>
+          <option value="dni">DNI</option>
+          <option value="contrato">Contrato</option>
+          <option value="recibo">Recibo</option>
+        </select>
+
+        <div>
+          <label class="form-label fw-bold">Archivo</label>
+          <input type="file" accept="application/pdf,.pdf" class="form-control custom-input"
+            (change)="onFileChange($event)">
+        </div>
+
+        <div *ngIf="errorMsg" class="text-danger mt-2">
+          {{ errorMsg }}
+        </div>
+
+      </div>
+
+
+      <div class="modal-footer-custom mt-4">
+        <button class="btn btn-guardar" (click)="subirDocumento()" [disabled]="!puedeGuardar()">
+          <i class="fa-solid fa-floppy-disk me-2"></i>
+          Guardar Documento
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,365 @@
+<div class="custom-modal metricas-modal">
+    <!-- HEADER -->
+    <div class="modal-header-custom">
+        <h3 class="modal-title-custom">
+            <i class="fa-solid fa-chart-line me-2"></i>
+            Dashboard de Métricas
+        </h3>
+        <button class="btn-close-custom" (click)="cerrar()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <div class="modal-body-custom">
+        <!-- ==================== -->
+        <!-- FILTROS (Preparado) -->
+        <!-- ==================== -->
+<div class="filtros-sticky">
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label class="form-label">
+                        Sede
+                    </label>
+
+                    <select 
+                    class="form-select"
+                    [(ngModel)]="sedeSeleccionada"
+                    (change)="cambioSede()">
+
+                    <option [ngValue]="null">
+                    Todas
+                    </option>
+
+                    <option 
+                    *ngFor="let sede of sedes"
+                    [ngValue]="sede.codsede">
+
+                    {{sede.nombre}}
+
+                    </option>
+
+                    </select>
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Año
+                    </label>
+
+                    <select class="form-select" disabled>
+
+                        <option>
+                        2026
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Mes
+                    </label>
+
+                    <select class="form-select" disabled>
+
+                        <option>
+                        Todos
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+        <!-- ==================== -->
+        <!-- KPI FINANCIEROS -->
+        <!-- ==================== -->
+        <h5 class="mb-3">
+            💰 Resumen Financiero
+        </h5>
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="kpi-card ingresos">
+                    <span>Ingresos</span>
+                    <h2>
+                        S/. {{metricas?.ingresos}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card gastos">
+                    <span>Gastos</span>
+                    <h2>
+                        S/. {{metricas?.gastos}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card ganancia">
+                    <span>Ganancia</span>
+                    <h2>
+                        S/. {{metricas?.ganancia}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card rentabilidad">
+                    <span>Rentabilidad</span>
+                    <h2>
+                        {{rentabilidad}}%
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <!-- ==================== -->
+        <!-- KPIS DEL NEGOCIO -->
+        <!-- ==================== -->
+        <h5 class="mb-3">
+            🏢 Estado del Negocio
+        </h5>
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="kpi-card">
+                    <span>Sedes</span>
+                    <h2>
+                        {{metricas?.sedes}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card">
+                    <span>Cuartos</span>
+                    <h2>
+                        {{metricas?.cuartos}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card">
+                    <span>Inquilinos</span>
+                    <h2>
+                        {{metricas?.inquilinos}}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="kpi-card">
+                    <span>Disponibles</span>
+                    <h2>
+                        {{ metricas?.disponibles }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+
+<h5 class="mb-3">
+    🚀 Indicadores rápidos
+</h5>
+
+<div class="row g-4">
+
+    <div class="col-lg-3">
+
+        <div class="kpi-card">
+
+            <span>Ocupación</span>
+
+            <h2>
+
+                {{metricas?.porcentajeOcupacion | number:'1.0-0'}}%
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="kpi-card">
+
+            <span>Promedio por cuarto</span>
+
+            <h2>
+
+                S/. {{metricas?.promedioPorCuarto | number:'1.0-2'}}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="kpi-card">
+
+            <span>Ganancia por inquilino</span>
+
+            <h2>
+
+                S/. {{metricas?.promedioPorInquilino | number:'1.0-2'}}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="kpi-card">
+
+            <span>Gastos</span>
+
+            <h2>
+
+                {{metricas?.porcentajeGastos | number:'1.0-1'}}%
+
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ==================== -->
+<!-- PROYECCIÓN -->
+<!-- ==================== -->
+
+<hr class="my-4">
+
+<h5 class="mb-3">
+    💡 Proyección del Negocio
+</h5>
+
+<div class="card shadow-sm border-0 proyeccion-card">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-3 text-center">
+
+                <h2 class="text-primary">
+
+                    {{metricas?.disponibles}}
+
+                </h2>
+
+                <small>
+                    Cuartos disponibles
+                </small>
+
+            </div>
+
+            <div class="col-md-3 text-center">
+
+                <h2 class="text-success">
+
+                    S/. {{metricas?.ganancia | number:'1.2-2'}}
+
+                </h2>
+
+                <small>
+                    Ingreso actual
+                </small>
+
+            </div>
+
+            <div class="col-md-2 text-center">
+
+                <i class="fa-solid fa-arrow-right fa-2x text-secondary"></i>
+
+            </div>
+
+            <div class="col-md-4 text-center">
+
+                <h2 class="text-success">
+
+                    S/. {{metricas?.ingresoPotencial | number:'1.2-2'}}
+
+                </h2>
+
+                <small>
+                    Ingreso potencial
+                </small>
+
+                <div class="mt-2">
+
+                    <span class="badge bg-success fs-6">
+
+                        + S/. {{metricas?.aumentoPotencial | number:'1.2-2'}}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="text-center">
+
+            <span class="text-muted">
+
+                Si alquilas todos los cuartos disponibles, podrías aumentar tus ingresos mensuales en
+
+            </span>
+
+            <strong class="text-success">
+
+                S/. {{metricas?.aumentoPotencial | number:'1.2-2'}}
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+        <hr class="my-4">
+        <!-- ==================== -->
+        <!-- GRAFICOS -->
+        <!-- ==================== -->
+        <h5>
+            📈 Análisis Visual
+        </h5>
+        <div class="row g-4 mt-1">
+            <div class="col-lg-6">
+                <div class="grafico-container">
+
+                <canvas #graficoFinanzas></canvas>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="grafico-container">
+
+                <canvas #graficoOcupacion></canvas>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
